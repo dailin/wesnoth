@@ -19,7 +19,7 @@
 #include "widgets/slider.hpp"
 #include "game_config.hpp"
 #include "font.hpp"
-#include "image.hpp"
+#include <image.hpp>
 #include "sound.hpp"
 #include "video.hpp"
 

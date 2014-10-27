@@ -16,13 +16,17 @@
 #include "key.hpp"
 
 CKey::CKey() :
-	key_list(SDL_GetKeyState(NULL))
+#if SDL_VERSION_ATLEAST(1,3,0)
+    key_list(SDL_GetKeyboardState(NULL))
+#else
+    key_list(SDL_GetKeyState(NULL))
+#endif
 {
 }
 
 bool CKey::operator[](int k) const
 {
-#if SDL_VERSION_ATLEAST(2,0,0)
+#if SDL_VERSION_ATLEAST(2,0,0) || SDL_VERSION_ATLEAST(1,3,0)
 	return key_list[SDL_GetScancodeFromKey(k)] > 0;
 #else
 	return key_list[k] > 0;

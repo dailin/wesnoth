@@ -20,7 +20,7 @@
 #include "global.hpp"
 
 #include "widgets/scrollbar.hpp"
-#include "image.hpp"
+#include <image.hpp>
 #include "video.hpp"
 
 #include <iostream>

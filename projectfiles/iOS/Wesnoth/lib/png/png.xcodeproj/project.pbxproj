@@ -18,7 +18,6 @@
 		3C97C1541631CB5600BFE895 /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 3C97C1441631CB5600BFE895 /* pngrtran.c */; };
 		3C97C1551631CB5600BFE895 /* pngrutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 3C97C1451631CB5600BFE895 /* pngrutil.c */; };
 		3C97C1561631CB5600BFE895 /* pngset.c in Sources */ = {isa = PBXBuildFile; fileRef = 3C97C1461631CB5600BFE895 /* pngset.c */; };
-		3C97C1571631CB5600BFE895 /* pngtest.c in Sources */ = {isa = PBXBuildFile; fileRef = 3C97C1471631CB5600BFE895 /* pngtest.c */; };
 		3C97C1581631CB5600BFE895 /* pngtrans.c in Sources */ = {isa = PBXBuildFile; fileRef = 3C97C1481631CB5600BFE895 /* pngtrans.c */; };
 		3C97C1591631CB5600BFE895 /* pngwio.c in Sources */ = {isa = PBXBuildFile; fileRef = 3C97C1491631CB5600BFE895 /* pngwio.c */; };
 		3C97C15A1631CB5600BFE895 /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 3C97C14A1631CB5600BFE895 /* pngwrite.c */; };
@@ -52,7 +51,6 @@
 		3C97C1441631CB5600BFE895 /* pngrtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngrtran.c; path = "../../../../lib/libpng-1.4.4/pngrtran.c"; sourceTree = "<group>"; };
 		3C97C1451631CB5600BFE895 /* pngrutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngrutil.c; path = "../../../../lib/libpng-1.4.4/pngrutil.c"; sourceTree = "<group>"; };
 		3C97C1461631CB5600BFE895 /* pngset.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngset.c; path = "../../../../lib/libpng-1.4.4/pngset.c"; sourceTree = "<group>"; };
-		3C97C1471631CB5600BFE895 /* pngtest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngtest.c; path = "../../../../lib/libpng-1.4.4/pngtest.c"; sourceTree = "<group>"; };
 		3C97C1481631CB5600BFE895 /* pngtrans.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngtrans.c; path = "../../../../lib/libpng-1.4.4/pngtrans.c"; sourceTree = "<group>"; };
 		3C97C1491631CB5600BFE895 /* pngwio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwio.c; path = "../../../../lib/libpng-1.4.4/pngwio.c"; sourceTree = "<group>"; };
 		3C97C14A1631CB5600BFE895 /* pngwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwrite.c; path = "../../../../lib/libpng-1.4.4/pngwrite.c"; sourceTree = "<group>"; };
@@ -110,7 +108,6 @@
 				3C97C1441631CB5600BFE895 /* pngrtran.c */,
 				3C97C1451631CB5600BFE895 /* pngrutil.c */,
 				3C97C1461631CB5600BFE895 /* pngset.c */,
-				3C97C1471631CB5600BFE895 /* pngtest.c */,
 				3C97C1481631CB5600BFE895 /* pngtrans.c */,
 				3C97C1491631CB5600BFE895 /* pngwio.c */,
 				3C97C14A1631CB5600BFE895 /* pngwrite.c */,
@@ -190,7 +187,6 @@
 				3C97C1541631CB5600BFE895 /* pngrtran.c in Sources */,
 				3C97C1551631CB5600BFE895 /* pngrutil.c in Sources */,
 				3C97C1561631CB5600BFE895 /* pngset.c in Sources */,
-				3C97C1571631CB5600BFE895 /* pngtest.c in Sources */,
 				3C97C1581631CB5600BFE895 /* pngtrans.c in Sources */,
 				3C97C1591631CB5600BFE895 /* pngwio.c in Sources */,
 				3C97C15A1631CB5600BFE895 /* pngwrite.c in Sources */,

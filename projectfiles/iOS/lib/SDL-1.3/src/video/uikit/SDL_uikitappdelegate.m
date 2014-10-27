@@ -193,15 +193,6 @@ static void SDL_IdleTimerDisabledChanged(const char *name, const char *oldValue,
 {
     /* run the user's application, passing argc and argv */
     SDL_iPhoneSetEventPump(SDL_TRUE);
-#ifdef __IPHONEOS__
-    app_dir = [[[NSBundle mainBundle] resourcePath] UTF8String];
-    NSArray *cache_dir_paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cache_dir_documentsDirectory = [cache_dir_paths objectAtIndex:0];
-    user_cache_dir = [cache_dir_documentsDirectory UTF8String];
-    NSArray *user_dir_paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *user_dir_documentsDirectory = [user_dir_paths objectAtIndex:0];
-    user_doc_dir = [user_dir_documentsDirectory UTF8String];
-#endif
     exit_status = SDL_main(forward_argc, forward_argv);
     SDL_iPhoneSetEventPump(SDL_FALSE);
 

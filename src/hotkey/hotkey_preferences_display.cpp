@@ -628,7 +628,11 @@ void hotkey_preferences_dialog::show_binding_dialog(
 			value = event.jhat.value;
 			break;
 		case SDL_MOUSEBUTTONDOWN:
+#if !SDL_VERSION_ATLEAST(1,3,0)
 			mouse = event.button.which;
+#else
+            mouse = 0;
+#endif
 			button = event.button.button;
 			break;
 		}

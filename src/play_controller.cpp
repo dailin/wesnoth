@@ -454,7 +454,9 @@ void play_controller::left_mouse_click(){
 	event.button = 1;
 	event.x = x + 30;
 	event.y = y + 30;
+#if !SDL_VERSION_ATLEAST(1,3,0)
 	event.which = 0;
+#endif
 	event.state = SDL_PRESSED;
 
 	mouse_handler_.mouse_press(event, false);
@@ -484,7 +486,9 @@ void play_controller::right_mouse_click(){
 	event.button = 3;
 	event.x = x + 30;
 	event.y = y + 30;
+#if !SDL_VERSION_ATLEAST(1,3,0)
 	event.which = 0;
+#endif
 	event.state = SDL_PRESSED;
 
 	mouse_handler_.mouse_press(event, true);

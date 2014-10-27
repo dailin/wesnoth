@@ -201,7 +201,6 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../lib/libogg-1.3.0/include\"";
 				OTHER_CFLAGS = (
-					"-falign-loops=16",
 					"-ffast-math",
 					"$(OTHER_CFLAGS)",
 				);
@@ -221,7 +220,6 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../lib/libogg-1.3.0/include\"";
 				OTHER_CFLAGS = (
-					"-falign-loops=16",
 					"-ffast-math",
 					"$(OTHER_CFLAGS)",
 				);

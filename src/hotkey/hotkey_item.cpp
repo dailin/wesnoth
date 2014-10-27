@@ -174,8 +174,11 @@ const hotkey_item& get_hotkey(const SDL_MouseButtonEvent& event)
 	bool ctrl  = keystate[SDLK_RCTRL]  || keystate[SDLK_LCTRL];
 	bool cmd   = keystate[SDLK_RMETA]  || keystate[SDLK_LMETA];
 	bool alt   = keystate[SDLK_RALT]   || keystate[SDLK_LALT];
-
+#if !SDL_VERSION_ATLEAST(1,3,0)
 	return get_hotkey(event.which, -1, event.button, -1, -1, shift, ctrl, cmd, alt);
+#else
+    return get_hotkey(0, -1, event.button, -1, -1, shift, ctrl, cmd, alt);
+#endif
 }
 
 

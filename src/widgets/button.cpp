@@ -20,7 +20,7 @@
 #include "font.hpp"
 #include "game_config.hpp"
 #include "game_errors.hpp"
-#include "image.hpp"
+#include <image.hpp>
 #include "log.hpp"
 #include "marked-up_text.hpp"
 #include "serialization/string_utils.hpp"

@@ -510,7 +510,7 @@ std::string copy_from_clipboard(const bool)
 }
 #endif
 
-#ifdef __APPLE__
+#if defined (__APPLE__) && !defined (__IPHONEOS__)
 #define CLIPBOARD_FUNCS_DEFINED
 
 #include <Carbon/Carbon.h>

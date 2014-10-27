@@ -21,7 +21,7 @@
 #include "game_config.hpp"
 #include "font.hpp"
 #include "language.hpp"
-#include "image.hpp"
+#include <image.hpp>
 #include "marked-up_text.hpp"
 #include "sound.hpp"
 #include "video.hpp"
@@ -698,8 +698,13 @@ void menu::handle_event(const SDL_Event& event)
 				// this double click was generated from a click that
 				// already has helped in generating a double click.
 				SDL_Event ev;
+#if SDL_VERSION_ATLEAST(1,3,0)
+                SDL_PeepEvents(&ev, 1, SDL_PEEKEVENT,
+                               DOUBLE_CLICK_EVENT,DOUBLE_CLICK_EVENT);
+#else
 				SDL_PeepEvents(&ev, 1, SDL_PEEKEVENT,
 							   SDL_EVENTMASK(DOUBLE_CLICK_EVENT));
+#endif
 				if (ev.type == DOUBLE_CLICK_EVENT) {
 					ignore_next_doubleclick_ = true;
 				}

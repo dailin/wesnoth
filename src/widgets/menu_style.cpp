@@ -20,7 +20,7 @@
 #include "widgets/menu.hpp"
 
 #include "font.hpp"
-#include "image.hpp"
+#include <image.hpp>
 #include "video.hpp"
 
 namespace gui {

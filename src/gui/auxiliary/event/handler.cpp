@@ -656,7 +656,7 @@ void thandler::key_down(const SDL_KeyboardEvent& event)
 		done = hotkey_pressed(hk);
 	}
 	if(!done) {
-		key_down(event.keysym.sym, event.keysym.mod, event.keysym.unicode);
+		key_down(event.keysym.sym, (SDLMod)event.keysym.mod, event.keysym.unicode);
 	}
 }
 

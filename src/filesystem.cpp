@@ -63,6 +63,10 @@ BPath be_path;
 #include "serialization/string_utils.hpp"
 #include "version.hpp"
 
+#ifdef __IPHONEOS__
+#include "iOSPathManager.h"
+#endif
+
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_filesystem("filesystem");
@@ -454,12 +458,16 @@ std::string get_cwd()
 std::string get_exe_dir()
 {
 #ifndef _WIN32
+#ifdef __IPHONEOS__
+    return iOSPathManager::getAppPath();
+#else
 	char buf[1024];
 	size_t path_size = readlink("/proc/self/exe", buf, sizeof(buf)-1);
 	if(path_size == static_cast<size_t>(-1))
 		return std::string();
 	buf[path_size] = 0;
 	return std::string(dirname(buf));
+#endif
 #else
 	return get_cwd();
 #endif
@@ -675,8 +683,12 @@ static void setup_user_data_dir()
 	create_directory_if_missing(dir_path + "/editor/scenarios");
 	create_directory_if_missing(dir_path + "/data");
 	create_directory_if_missing(dir_path + "/data/add-ons");
-	create_directory_if_missing(dir_path + "/saves");
-	create_directory_if_missing(dir_path + "/persist");
+#ifdef __IPHONEOS__
+    create_directory_if_missing(iOSPathManager::getDocPath() + "/saves");
+#else
+    create_directory_if_missing(dir_path + "/saves");
+#endif	
+    create_directory_if_missing(dir_path + "/persist");
 #endif
 }
 

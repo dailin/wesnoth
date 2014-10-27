@@ -79,14 +79,25 @@ void controller_base::handle_event(const SDL_Event& event)
 	case SDL_MOUSEMOTION:
 		// Ignore old mouse motion events in the event queue
 		SDL_Event new_event;
-		if(SDL_PeepEvents(&new_event,1,SDL_GETEVENT,
-					SDL_EVENTMASK(SDL_MOUSEMOTION)) > 0) {
-			while(SDL_PeepEvents(&new_event,1,SDL_GETEVENT,
-						SDL_EVENTMASK(SDL_MOUSEMOTION)) > 0) {};
-			get_mouse_handler_base().mouse_motion_event(new_event.motion, browse_);
-		} else {
-			get_mouse_handler_base().mouse_motion_event(event.motion, browse_);
-		}
+#if SDL_VERSION_ATLEAST(1,3,0)
+            if(SDL_PeepEvents(&new_event,1,SDL_GETEVENT,
+                              SDL_MOUSEMOTION,SDL_MOUSEMOTION) > 0) {
+                while(SDL_PeepEvents(&new_event,1,SDL_GETEVENT,
+                                     SDL_MOUSEMOTION,SDL_MOUSEMOTION) > 0) {};
+                get_mouse_handler_base().mouse_motion_event(new_event.motion, browse_);
+            } else {
+                get_mouse_handler_base().mouse_motion_event(event.motion, browse_);
+            }
+#else
+            if(SDL_PeepEvents(&new_event,1,SDL_GETEVENT,
+                              SDL_EVENTMASK(SDL_MOUSEMOTION)) > 0) {
+                while(SDL_PeepEvents(&new_event,1,SDL_GETEVENT,
+                                     SDL_EVENTMASK(SDL_MOUSEMOTION)) > 0) {};
+                get_mouse_handler_base().mouse_motion_event(new_event.motion, browse_);
+            } else {
+                get_mouse_handler_base().mouse_motion_event(event.motion, browse_);
+            }
+#endif
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 		process_keydown_event(event);

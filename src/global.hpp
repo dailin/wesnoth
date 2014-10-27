@@ -49,7 +49,7 @@
  * the macro manually.
  */
 #if (__cplusplus >= 201103L)
-#define HAVE_CXX11
+//#define HAVE_CXX11
 #endif
 
 #ifdef HAVE_CXX11

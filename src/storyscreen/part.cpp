@@ -27,7 +27,7 @@
 #include "gamestatus.hpp"
 #include "game_events/action_wml.hpp"
 #include "game_events/conditional_wml.hpp"
-#include "image.hpp"
+#include <image.hpp>
 #include "serialization/string_utils.hpp"
 #include "util.hpp"
 #include "variable.hpp"

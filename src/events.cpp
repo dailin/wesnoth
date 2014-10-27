@@ -489,16 +489,31 @@ void discard_input()
 
 #else
 
+#if SDL_VERSION_ATLEAST(1,3,0)
+#define INPUT_MASK SDL_KEYDOWN|\
+    SDL_KEYUP|\
+    SDL_MOUSEBUTTONDOWN|\
+    SDL_MOUSEBUTTONUP|\
+    SDL_JOYBUTTONDOWN|\
+    SDL_JOYBUTTONUP
+    
+#else
 #define INPUT_MASK (SDL_EVENTMASK(SDL_KEYDOWN)|\
 		SDL_EVENTMASK(SDL_KEYUP)|\
 		SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN)|\
 		SDL_EVENTMASK(SDL_MOUSEBUTTONUP)|\
 		SDL_EVENTMASK(SDL_JOYBUTTONDOWN)|\
 		SDL_EVENTMASK(SDL_JOYBUTTONUP))
+    
+#endif
 
 bool is_input(const SDL_Event& event)
 {
+#if SDL_VERSION_ATLEAST(1,3,0)
+    return event.type & INPUT_MASK;
+#else
 	return SDL_EVENTMASK(event.type) & INPUT_MASK;
+#endif
 }
 
 static void discard(Uint32 event_mask)
@@ -507,7 +522,11 @@ static void discard(Uint32 event_mask)
 	std::vector< SDL_Event > keepers;
 	SDL_Delay(10);
 	while(SDL_PollEvent(&temp_event) > 0) {
+#if SDL_VERSION_ATLEAST(1,3,0)
+        if((temp_event.type & event_mask) == 0) {
+#else
 		if((SDL_EVENTMASK(temp_event.type) & event_mask) == 0) {
+#endif
 			keepers.push_back( temp_event );
 		}
 	}
@@ -530,7 +549,7 @@ void discard_input()
 
 } //end events namespace
 
-#if !SDL_VERSION_ATLEAST(2,0,0)
+#if !SDL_VERSION_ATLEAST(2,0,0) && !SDL_VERSION_ATLEAST(1,3,0)
 
 void SDL_FlushEvent(Uint32 type)
 {

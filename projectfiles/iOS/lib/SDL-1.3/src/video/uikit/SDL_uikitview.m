@@ -111,51 +111,69 @@ extern int IOS_SCREEN_HEIGHT;
     return point;
 }
 
-int PointInRect(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (x1 > x2+w2)
+    if (keyboardVisible)
     {
-        //' rec 1 is too far right
-        return false;
+        [self hideKeyboard];
     }
-    else
+    
+    NSSet *allTouches = [event allTouches];
+    if ([allTouches count] == 2)
     {
-        if (x1+w1 < x2)
+        UITouch *touch1 = [[allTouches allObjects] objectAtIndex:0];
+        UITouch *touch2 = [[allTouches allObjects] objectAtIndex:1];
+        
+        initialDistance = [self distanceBetweenTwoPoints:[touch1 locationInView: self]
+                                                 toPoint:[touch2 locationInView: self]];
+        return;
+    }
+    
+    NSEnumerator *enumerator = [touches objectEnumerator];
+    UITouch *touch = (UITouch*)[enumerator nextObject];
+    
+    while (touch) {
+        //        if (!leftFingerDown) {
+        CGPoint locationInView = [self touchLocation:touch shouldNormalize:NO];
+        
+        /* send moved event */
+        SDL_SendMouseMotion(NULL, 0, locationInView.x, locationInView.y);
+        
+        /* send mouse down event */
+        if ([touch tapCount] >= 2)
         {
-            //' rec 1 is too far left
-            return false;
         }
         else
         {
-            //' xs are overlapping - check ys
-            if (y1 > y2+h2)
-            {
-                //' rec 1 is too far down
-                return false;
-            }
-            else
-            {
-                if (y1+h1 < y2)
-                {
-                    //' rec 1 is too far above
-                    return false;
-                }
-                else
-                {
-                    //' overlap?
-                    return true;
-                }
-            }
+            SDL_SendMouseButton(NULL, SDL_PRESSED, SDL_BUTTON_LEFT);
         }
-    }
-}
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+        touch = (UITouch*)[enumerator nextObject];
+    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    NSSet *allTouches = [event allTouches];
+    
+    NSEnumerator *enumerator = [touches objectEnumerator];
+    UITouch *touch = (UITouch*)[enumerator nextObject];
+    
+    while(touch) {
+        //        if ((SDL_FingerID)touch == leftFingerDown) {
+        /* send mouse up */
+        if ([touch tapCount] >= 2)
+        {
+            SDL_SendMouseButton(NULL, SDL_PRESSED, SDL_BUTTON_RIGHT);
+            SDL_SendMouseButton(NULL, SDL_RELEASED, SDL_BUTTON_RIGHT);
+        }
+        else
+        {
+            SDL_SendMouseButton(NULL, SDL_RELEASED, SDL_BUTTON_LEFT);
+        }
+        
+        touch = (UITouch*)[enumerator nextObject];
+    }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
@@ -170,6 +188,17 @@ int PointInRect(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    NSEnumerator *enumerator = [touches objectEnumerator];
+    UITouch *touch = (UITouch*)[enumerator nextObject];
+    
+    while (touch) {
+        //        if ((SDL_FingerID)touch == leftFingerDown) {
+        CGPoint locationInView = [self touchLocation:touch shouldNormalize:NO];
+        
+        /* send moved event */
+        SDL_SendMouseMotion(NULL, 0, locationInView.x, locationInView.y);
+        touch = (UITouch*)[enumerator nextObject];
+    }
 }
 
 /*

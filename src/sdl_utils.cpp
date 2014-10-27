@@ -89,7 +89,11 @@ SDLKey sdl_keysym_from_name(std::string const &keyname)
 	static keysym_map_t keysym_map;
 
 	if (!initialized) {
+#ifndef __IPHONEOS__
 		for(SDLKey i = SDLK_FIRST; i < SDLK_LAST; i = SDLKey(int(i) + 1)) {
+#else
+        for(SDLKey i = /*SDLK_FIRST*/ 0; i < /*SDLK_LAST*/ 256; i = SDLKey(int(i) + 1)) {
+#endif
 			std::string name = SDL_GetKeyName(i);
 			if (!name.empty())
 				keysym_map[name] = i;
