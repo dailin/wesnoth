@@ -14,11 +14,11 @@
 		<string>github.com:dailin/wesnoth.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>projectfiles/iOS/Wesnoth/Wesnoth.xcodeproj</string>
+	<string>projectfiles/iOS/Wesnoth.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>78E336887E5C463750BA3C52C01DD10F2EB3C58D</key>
-		<string>../../../../..</string>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>github.com:dailin/wesnoth.git</string>

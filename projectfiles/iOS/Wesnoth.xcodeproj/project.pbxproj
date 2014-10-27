@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		3C22372F19F3FC2100D54D46 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C22372E19F3FC2100D54D46 /* Images.xcassets */; };
 		3C2BE1E819F506870096FEB5 /* libboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C2BE1E519F505620096FEB5 /* libboost.a */; };
+		3C435C1E19FE491A0050BA87 /* filesystem_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C435C1C19FE491A0050BA87 /* filesystem_common.cpp */; };
+		3C435C3F19FE6A2C0050BA87 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C435C2419FE69C20050BA87 /* libSDL_mixer.a */; };
+		3C435C4119FE6F720050BA87 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 3C435C4019FE6F720050BA87 /* sounds */; };
+		3C435C4319FE6F7F0050BA87 /* po in Resources */ = {isa = PBXBuildFile; fileRef = 3C435C4219FE6F7F0050BA87 /* po */; };
 		3C4E5C9E19F4A5B400D8046D /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E5C9D19F4A5B400D8046D /* Appirater.m */; };
 		3C4E5CA319F4A9E300D8046D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C4E5CA219F4A9E300D8046D /* AudioToolbox.framework */; };
 		3C4E619519F4AD8E00D8046D /* .clang-format in Resources */ = {isa = PBXBuildFile; fileRef = 3C4E5CA819F4AD8800D8046D /* .clang-format */; };
@@ -558,7 +562,6 @@
 		3C81058619F8E12700AD9320 /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C81058119F8E11600AD9320 /* libSDL_image.a */; };
 		3C81059719F8E1DC00AD9320 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C81059219F8E1CA00AD9320 /* libjpeg.a */; };
 		3C81059819F8E1DC00AD9320 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C81058C19F8E1C100AD9320 /* libpng.a */; };
-		3C81060219F8E33800AD9320 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8105FD19F8E32500AD9320 /* libSDL_mixer.a */; };
 		3CAF2FE119F9FFF9004DE0F6 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CAF2FE019F9FFF9004DE0F6 /* libbz2.dylib */; };
 		3CEDAFC119F8A54C0047608C /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CE710E419F7A37500657B00 /* libSDL.a */; };
 		3CEDAFC319F8A5670047608C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CEDAFC219F8A5670047608C /* OpenGLES.framework */; };
@@ -598,6 +601,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3CD0697616314E980014DBBB;
 			remoteInfo = boost;
+		};
+		3C435C2319FE69C20050BA87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3C435C1F19FE69C10050BA87 /* SDL_mixer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BE1FA95407AF96B2004B6283;
+			remoteInfo = "Static Library";
+		};
+		3C435C3D19FE6A1F0050BA87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3C435C1F19FE69C10050BA87 /* SDL_mixer.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BE1FA90707AF96B2004B6283;
+			remoteInfo = "Static Library";
 		};
 		3C81053819F8DC1C00AD9320 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -661,27 +678,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3C97C1251631CB0C00BFE895;
 			remoteInfo = png;
-		};
-		3C8105FC19F8E32500AD9320 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3C8105F719F8E32500AD9320 /* SDL_mixer.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3C8105A219F8E28300AD9320;
-			remoteInfo = SDL_mixer;
-		};
-		3C8105FE19F8E32500AD9320 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3C8105F719F8E32500AD9320 /* SDL_mixer.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3C8105AD19F8E28300AD9320;
-			remoteInfo = SDL_mixerTests;
-		};
-		3C81060019F8E33300AD9320 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3C8105F719F8E32500AD9320 /* SDL_mixer.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 3C8105A119F8E28300AD9320;
-			remoteInfo = SDL_mixer;
 		};
 		3CE710E319F7A37500657B00 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -874,6 +870,10 @@
 		3C22373C19F3FC2200D54D46 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3C22373D19F3FC2200D54D46 /* WesnothTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WesnothTests.m; sourceTree = "<group>"; };
 		3C2BE1E019F505610096FEB5 /* boost.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = boost.xcodeproj; path = Wesnoth/lib/boost/boost.xcodeproj; sourceTree = "<group>"; };
+		3C435C1C19FE491A0050BA87 /* filesystem_common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filesystem_common.cpp; sourceTree = "<group>"; };
+		3C435C1F19FE69C10050BA87 /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = "lib/SDL_mixer-1.2.12/Xcode-iOS/SDL_mixer.xcodeproj"; sourceTree = "<group>"; };
+		3C435C4019FE6F720050BA87 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = ../../sounds; sourceTree = "<group>"; };
+		3C435C4219FE6F7F0050BA87 /* po */ = {isa = PBXFileReference; lastKnownFileType = folder; name = po; path = ../../po; sourceTree = "<group>"; };
 		3C4E5C9C19F4A5B400D8046D /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
 		3C4E5C9D19F4A5B400D8046D /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
 		3C4E5CA219F4A9E300D8046D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -1977,7 +1977,6 @@
 		3C81057B19F8E11600AD9320 /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = Wesnoth/lib/SDL_image/SDL_image.xcodeproj; sourceTree = "<group>"; };
 		3C81058719F8E1C100AD9320 /* png.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = png.xcodeproj; path = Wesnoth/lib/png/png.xcodeproj; sourceTree = "<group>"; };
 		3C81058D19F8E1C900AD9320 /* jpeg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = jpeg.xcodeproj; path = Wesnoth/lib/jpeg/jpeg.xcodeproj; sourceTree = "<group>"; };
-		3C8105F719F8E32500AD9320 /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = Wesnoth/lib/SDL_mixer/SDL_mixer.xcodeproj; sourceTree = "<group>"; };
 		3CAF2FE019F9FFF9004DE0F6 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		3CE710DC19F7A37400657B00 /* SDLiPhoneOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDLiPhoneOS.xcodeproj; path = "lib/SDL-1.3/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj"; sourceTree = "<group>"; };
 		3CEDAFC219F8A5670047608C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -2012,8 +2011,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C435C3F19FE6A2C0050BA87 /* libSDL_mixer.a in Frameworks */,
 				3CAF2FE119F9FFF9004DE0F6 /* libbz2.dylib in Frameworks */,
-				3C81060219F8E33800AD9320 /* libSDL_mixer.a in Frameworks */,
 				3C81059719F8E1DC00AD9320 /* libjpeg.a in Frameworks */,
 				3C81059819F8E1DC00AD9320 /* libpng.a in Frameworks */,
 				3C81058619F8E12700AD9320 /* libSDL_image.a in Frameworks */,
@@ -2105,6 +2104,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3C435C2019FE69C10050BA87 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3C435C2419FE69C20050BA87 /* libSDL_mixer.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3C4E5CA719F4AD8800D8046D /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -2165,6 +2172,7 @@
 				3C4E5DC519F4AD8900D8046D /* exceptions.hpp */,
 				3C4E5DC619F4AD8900D8046D /* filechooser.cpp */,
 				3C4E5DC719F4AD8900D8046D /* filechooser.hpp */,
+				3C435C1C19FE491A0050BA87 /* filesystem_common.cpp */,
 				3C4E5DC819F4AD8900D8046D /* filesystem.cpp */,
 				3C4E5DC919F4AD8900D8046D /* filesystem.hpp */,
 				3C4E5DCB19F4AD8900D8046D /* flg_manager.cpp */,
@@ -3634,15 +3642,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3C8105F819F8E32500AD9320 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3C8105FD19F8E32500AD9320 /* libSDL_mixer.a */,
-				3C8105FF19F8E32500AD9320 /* SDL_mixerTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		3CAF2FD619F9FF92004DE0F6 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
@@ -3657,7 +3656,7 @@
 		3CAF2FDF19F9FFB0004DE0F6 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				3C8105F719F8E32500AD9320 /* SDL_mixer.xcodeproj */,
+				3C435C1F19FE69C10050BA87 /* SDL_mixer.xcodeproj */,
 				3C81058D19F8E1C900AD9320 /* jpeg.xcodeproj */,
 				3C81058719F8E1C100AD9320 /* png.xcodeproj */,
 				3C81057B19F8E11600AD9320 /* SDL_image.xcodeproj */,
@@ -3681,6 +3680,8 @@
 		3CAF2FF119FA2BFE004DE0F6 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				3C435C4219FE6F7F0050BA87 /* po */,
+				3C435C4019FE6F720050BA87 /* sounds */,
 				3CF3049019FCA6DF0002E92A /* icons */,
 				3CF3049119FCA6DF0002E92A /* images */,
 				3CF3048E19FCA6CE0002E92A /* data */,
@@ -3811,7 +3812,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				3C81060119F8E33300AD9320 /* PBXTargetDependency */,
+				3C435C3E19FE6A1F0050BA87 /* PBXTargetDependency */,
 				3C81059419F8E1D700AD9320 /* PBXTargetDependency */,
 				3C81059619F8E1D700AD9320 /* PBXTargetDependency */,
 				3C81058519F8E11F00AD9320 /* PBXTargetDependency */,
@@ -3909,8 +3910,8 @@
 					ProjectRef = 3C81057B19F8E11600AD9320 /* SDL_image.xcodeproj */;
 				},
 				{
-					ProductGroup = 3C8105F819F8E32500AD9320 /* Products */;
-					ProjectRef = 3C8105F719F8E32500AD9320 /* SDL_mixer.xcodeproj */;
+					ProductGroup = 3C435C2019FE69C10050BA87 /* Products */;
+					ProjectRef = 3C435C1F19FE69C10050BA87 /* SDL_mixer.xcodeproj */;
 				},
 				{
 					ProductGroup = 3CEDB0FF19F8DA460047608C /* Products */;
@@ -3942,6 +3943,13 @@
 			fileType = archive.ar;
 			path = libboost.a;
 			remoteRef = 3C2BE1E419F505620096FEB5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3C435C2419FE69C20050BA87 /* libSDL_mixer.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL_mixer.a;
+			remoteRef = 3C435C2319FE69C20050BA87 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3C81053919F8DC1C00AD9320 /* libiconv.a */ = {
@@ -3977,20 +3985,6 @@
 			fileType = archive.ar;
 			path = libjpeg.a;
 			remoteRef = 3C81059119F8E1CA00AD9320 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3C8105FD19F8E32500AD9320 /* libSDL_mixer.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSDL_mixer.a;
-			remoteRef = 3C8105FC19F8E32500AD9320 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3C8105FF19F8E32500AD9320 /* SDL_mixerTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SDL_mixerTests.xctest;
-			remoteRef = 3C8105FE19F8E32500AD9320 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3CE710E419F7A37500657B00 /* libSDL.a */ = {
@@ -4115,7 +4109,9 @@
 				3C4E61BA19F4AD8E00D8046D /* .gitignore in Resources */,
 				3C4E636719F4AD8E00D8046D /* .gitignore in Resources */,
 				3CF3048F19FCA6CE0002E92A /* data in Resources */,
+				3C435C4119FE6F720050BA87 /* sounds in Resources */,
 				3C4E626B19F4AD8E00D8046D /* .gitignore in Resources */,
+				3C435C4319FE6F7F0050BA87 /* po in Resources */,
 				3C4E628A19F4AD8E00D8046D /* .gitignore in Resources */,
 				3C4E62A919F4AD8E00D8046D /* .gitignore in Resources */,
 				3C4E61A519F4AD8E00D8046D /* .gitignore in Resources */,
@@ -4155,6 +4151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C4E637719F4AD8E00D8046D /* input_stream.cpp in Sources */,
+				3C435C1E19FE491A0050BA87 /* filesystem_common.cpp in Sources */,
 				3C4E623F19F4AD8E00D8046D /* generic_event.cpp in Sources */,
 				3C4E63FA19F4AD8E00D8046D /* scrollbar.cpp in Sources */,
 				3C4E628119F4AD8E00D8046D /* spacer.cpp in Sources */,
@@ -4680,6 +4677,11 @@
 			name = boost;
 			targetProxy = 3C2BE1E619F506810096FEB5 /* PBXContainerItemProxy */;
 		};
+		3C435C3E19FE6A1F0050BA87 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Static Library";
+			targetProxy = 3C435C3D19FE6A1F0050BA87 /* PBXContainerItemProxy */;
+		};
 		3C81053B19F8DC2900AD9320 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = iconv;
@@ -4699,11 +4701,6 @@
 			isa = PBXTargetDependency;
 			name = png;
 			targetProxy = 3C81059519F8E1D700AD9320 /* PBXContainerItemProxy */;
-		};
-		3C81060119F8E33300AD9320 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = SDL_mixer;
-			targetProxy = 3C81060019F8E33300AD9320 /* PBXContainerItemProxy */;
 		};
 		3CEDAFD719F8A9D40047608C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4865,7 +4862,7 @@
 					"\"$(SRCROOT)/lib/fontconfig-2.8.0/fontconfig\"",
 					"\"$(SRCROOT)/lib/SDL-1.3/include\"",
 					"\"$(SRCROOT)/lib/SDL_image/include\"",
-					"\"$(SRCROOT)/lib/SDL_mixer/include\"",
+					"\"$(SRCROOT)/lib/SDL_mixer-1.2.12\"",
 				);
 				INFOPLIST_FILE = Wesnoth/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -4899,7 +4896,7 @@
 					"\"$(SRCROOT)/lib/fontconfig-2.8.0/fontconfig\"",
 					"\"$(SRCROOT)/lib/SDL-1.3/include\"",
 					"\"$(SRCROOT)/lib/SDL_image/include\"",
-					"\"$(SRCROOT)/lib/SDL_mixer/include\"",
+					"\"$(SRCROOT)/lib/SDL_mixer-1.2.12\"",
 				);
 				INFOPLIST_FILE = Wesnoth/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
