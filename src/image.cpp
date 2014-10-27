@@ -375,8 +375,8 @@ static bool localized_file_uptodate (const std::string& loc_file)
 	if (fuzzy_localized_files.empty()) {
 		// First call, parse track index to collect fuzzy files by path.
 		std::string fsep = "\xC2\xA6"; // UTF-8 for "broken bar"
-		std::string trackpath = get_binary_file_location("", "l10n-track");
-		std::string contents = read_file(trackpath);
+		std::string trackpath = filesystem::get_binary_file_location("", "l10n-track");
+		std::string contents = filesystem::read_file(trackpath);
 		std::vector<std::string> lines = utils::split(contents, '\n');
 		BOOST_FOREACH(const std::string &line, lines) {
 			size_t p1 = line.find(fsep);
@@ -401,8 +401,8 @@ static bool localized_file_uptodate (const std::string& loc_file)
 // Localized counterpart may also be requested to have a suffix to base name.
 static std::string get_localized_path (const std::string& file, const std::string& suff = "")
 {
-	std::string dir = directory_name(file);
-	std::string base = file_name(file);
+	std::string dir = filesystem::directory_name(file);
+	std::string base = filesystem::base_name(file);
 	const size_t pos_ext = base.rfind(".");
 	std::string loc_base;
 	if (pos_ext != std::string::npos) {
@@ -426,8 +426,8 @@ static std::string get_localized_path (const std::string& file, const std::strin
 	// not have it when translated.
 	langs.push_back("en_US");
 	BOOST_FOREACH(const std::string &lang, langs) {
-		std::string loc_file = dir + "l10n" + "/" + lang + "/" + loc_base;
-		if (file_exists(loc_file) && localized_file_uptodate(loc_file)) {
+		std::string loc_file = dir + "/" + "l10n" + "/" + lang + "/" + loc_base;
+		if (filesystem::file_exists(loc_file) && localized_file_uptodate(loc_file)) {
 			return loc_file;
 		}
 	}
@@ -437,7 +437,8 @@ static std::string get_localized_path (const std::string& file, const std::strin
 // Load overlay image and compose it with the original surface.
 static void add_localized_overlay (const std::string& ovr_file, surface &orig_surf)
 {
-	surface ovr_surf = IMG_Load(ovr_file.c_str());
+	SDL_RWops *rwops = filesystem::load_RWops(ovr_file);
+	surface ovr_surf = IMG_Load_RW(rwops, true); // SDL takes ownership of rwops
 	if (ovr_surf.null()) {
 		return;
 	}
@@ -453,7 +454,7 @@ surface locator::load_image_file() const
 {
 	surface res;
 
-	std::string location = get_binary_file_location("images", val_.filename_);
+	std::string location = filesystem::get_binary_file_location("images", val_.filename_);
 
 
 	{
@@ -463,7 +464,8 @@ surface locator::load_image_file() const
 			if (!loc_location.empty()) {
 				location = loc_location;
 			}
-			res = IMG_Load(location.c_str());
+			SDL_RWops *rwops = filesystem::load_RWops(location);
+			res = IMG_Load_RW(rwops, true); // SDL takes ownership of rwops
 			// If there was no standalone localized image, check if there is an overlay.
 			if (!res.null() && loc_location.empty()) {
 				const std::string ovr_location = get_localized_path(location, "--overlay");
@@ -597,7 +599,7 @@ surface locator::load_image_sub_file() const
 
 bool locator::file_exists() const
 {
-	return !get_binary_file_location("images", val_.filename_).empty();
+	return !filesystem::get_binary_file_location("images", val_.filename_).empty();
 }
 
 surface locator::load_from_disk() const
@@ -1017,7 +1019,7 @@ bool exists(const image::locator& i_locator)
 		it = image_existence_map.insert(std::make_pair(i_locator.get_filename(), false));
 	bool &cache = it.first->second;
 	if (it.second)
-		cache = !get_binary_file_location("images", i_locator.get_filename()).empty();
+		cache = !filesystem::get_binary_file_location("images", i_locator.get_filename()).empty();
 	return cache;
 }
 
@@ -1028,10 +1030,13 @@ static void precache_file_existence_internal(const std::string& dir, const std::
 		return;
 	precached_dirs.insert(checked_dir);
 
+	if (!filesystem::is_directory(checked_dir))
+		return;
+
 	std::vector<std::string> files_found;
 	std::vector<std::string> dirs_found;
-	get_files_in_dir(checked_dir, &files_found, &dirs_found,
-			FILE_NAME_ONLY, NO_FILTER, DONT_REORDER);
+	filesystem::get_files_in_dir(checked_dir, &files_found, &dirs_found,
+			filesystem::FILE_NAME_ONLY, filesystem::NO_FILTER, filesystem::DONT_REORDER);
 
 	for(std::vector<std::string>::const_iterator f = files_found.begin();
 			f != files_found.end(); ++f) {
@@ -1046,7 +1051,7 @@ static void precache_file_existence_internal(const std::string& dir, const std::
 
 void precache_file_existence(const std::string& subdir)
 {
-	const std::vector<std::string>& paths = get_binary_paths("images");
+	const std::vector<std::string>& paths = filesystem::get_binary_paths("images");
 
 	for(std::vector<std::string>::const_iterator p = paths.begin();
 			 p != paths.end(); ++p) {

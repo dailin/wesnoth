@@ -890,8 +890,8 @@ void show_addons_manager_dialog(display& disp, addons_client& client, addons_lis
 		}
 	}
 
-	const char* msg_title = NULL;
-	const char* msg_text = NULL;
+	std::string msg_title;
+	std::string msg_text;
 
 	// Use the Update terminology when using Update All or working with the
 	// Upgradable add-ons view.
@@ -992,8 +992,8 @@ bool addons_manager_ui(display& disp, const std::string& remote_address)
 	} catch(const network_asio::error& e) {
 		ERR_NET << "network_asio::error thrown during transaction with add-on server; \""<< e.what() << "\"\n";
 		gui2::show_error_message(disp.video(), _("Remote host disconnected."));
-	} catch(const io_exception& e) {
-		ERR_FS << "io_exception thrown while installing an addon; \"" << e.what() << "\"\n";
+	} catch(const filesystem::io_exception& e) {
+		ERR_FS << "filesystem::io_exception thrown while installing an addon; \"" << e.what() << "\"\n";
 		gui2::show_error_message(disp.video(), _("A problem occurred when trying to create the files necessary to install this add-on."));
 	} catch(const invalid_pbl_exception& e) {
 		ERR_CFG << "could not read .pbl file " << e.path << ": " << e.message << "\n";

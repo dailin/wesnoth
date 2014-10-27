@@ -2,9 +2,27 @@ This is meant to be a concise list of player-visible changes (very minor
 changes may be omitted). For a complete list of changes, see the main
 changelog: https://github.com/wesnoth/wesnoth/blob/1.12/changelog
 
-Version 1.11.17+dev:
+Version 1.11.18+dev:
  * Language and i18n:
-   * Updated translations: Lithuanian.
+   * Updated translations:
+
+   
+Version 1.11.18:
+ * Campaigns:
+   * Eastern Invasion:
+     * Updated maps for scenario 14, 16 and 17b.
+   * Under the Burning Suns:
+     * Fixed recruited Desert Archers being always male.
+     * Fixed malformed rand range errors during AI turns on medium difficulty
+       in 'A Stirring in the Night'.
+     * Fixed 100 vs. 99 movement cost warnings caused by the Desert Shyde and
+       Star unit types
+     * Fixed bug #22800: Cloaked Figure appears in strange location.
+     * Fixed bug #22799: No allies killed by enemy reinforcements.
+     * Fixed bug #22790: Various problems with dehydration.
+
+ * Language and i18n:
+   * Updated translations: Hungarian, Italian, Lithuanian, Slovak, Spanish.
 
 
 Version 1.11.17:

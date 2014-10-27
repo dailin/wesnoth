@@ -1,18 +1,34 @@
-Version 1.11.17+dev:
+Version 1.11.18:
+ * Language and i18n:
+   * Updated translations:
+
+Version 1.11.18:
  * Add-ons server:
    * Fixed attempt to access freed memory in [request_campaign_list] handler.
  * Campaigns:
+   * Eastern Invasion:
+     * Updated maps for scenario 14, 16 and 17b.
    * Under the Burning Suns:
+     * Fixed recruited Desert Archers being always male.
+     * Fixed malformed rand range errors during AI turns on medium difficulty
+       in 'A Stirring in the Night'.
+     * Fixed 100 vs. 99 movement cost warnings caused by the Desert Shyde and
+       Star unit types
      * Fixed bug #22800: Cloaked Figure appears in strange location.
+     * Fixed bug #22799: No allies killed by enemy reinforcements.
+     * Fixed bug #22790: Various problems with dehydration.
+ * Graphics:
+   * New Ancient Lich baseframe and animations
  * Language and i18n:
-   * Updated translations: Lithuanian
+   * Updated translations: Hungarian, Italian, Lithuanian, Slovak, Spanish
  * Miscellaneous and bug fixes:
    * Bug fix: another instance of "overlapping messages", this time with
      the planning mode activiation hotkey
    * Lurkers Micro AI: fix bug in wander terrain selection
-   * Fix bug #21400: Use unit 'image' with higher priority than 'image_icon' for animation
-     frames with no specified image.
-   * Fix bug wherein {MOVE_UNIT} would sometimes overwrite another unit.
+   * Fix bug #21400: Use unit 'image' with higher priority than 'image_icon' for
+     animation frames with no specified image.
+   * Fix bug wherein [move_unit] (used by {MOVE_UNIT}) would overwrite another
+     unit when the source and destination had an identical x or y value.
 
 Version 1.11.17:
  * Add-ons server:

@@ -214,13 +214,13 @@ void show_hotkeys_preferences_dialog(display& disp) {
 
 	// tab names and icons
 	items.push_back(pre + "general.png" + sep
-			+ sgettext("Prefs section^General"));
+			+ translation::sgettext("Prefs section^General"));
 	items.push_back(pre + "titlescreen.png" + sep
-			+ sgettext("Prefs section^Title Screen"));
+			+ translation::sgettext("Prefs section^Title Screen"));
 	items.push_back(pre + "game.png"    + sep
-			+ sgettext("Prefs section^Game"));
+			+ translation::sgettext("Prefs section^Game"));
 	items.push_back(pre + "editor.png"  + sep
-			+ sgettext("Prefs section^Editor"));
+			+ translation::sgettext("Prefs section^Editor"));
 
 	// determine the current scope, but skip general == 0
 	int scope;
@@ -381,7 +381,7 @@ void hotkey_preferences_dialog::set_hotkey_menu(bool keep_viewport) {
 		const std::string& name = hotkey::get_names(command);
 
 		std::string image_path = "misc/empty.png~CROP(0,0,15,15)";
-		if (file_exists(game_config::path + "/images/icons/action/" + command + "_25.png"))
+		if (filesystem::file_exists(game_config::path + "/images/icons/action/" + command + "_25.png"))
 			image_path = "icons/action/" + command + "_25.png~CROP(3,3,18,18)";
 
 		menu_items.push_back(

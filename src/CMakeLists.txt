@@ -199,9 +199,8 @@ endif(ENABLE_SHARED_LIBRARIES)
 set(libwesnoth-core_STAT_SRC
 	color_range.cpp
 	config.cpp
-	filesystem.cpp
+	filesystem_common.cpp
 	game_config.cpp
-	gettext.cpp
 	hash.cpp
 	log.cpp
 	md5.cpp
@@ -216,6 +215,20 @@ set(libwesnoth-core_STAT_SRC
 	serialization/tokenizer.cpp
 	serialization/validator.cpp
 )
+
+if(ENABLE_BOOST_FILESYSTEM AND NOT ENABLE_PANDORA)
+	set(libwesnoth-core_STAT_SRC
+		${libwesnoth-core_STAT_SRC}
+		filesystem_boost.cpp
+		gettext_boost.cpp
+	)
+else(ENABLE_BOOST_FILESYSTEM AND NOT ENABLE_PANDORA)
+	set(libwesnoth-core_STAT_SRC
+		${libwesnoth-game_STAT_SRC}
+		filesystem.cpp
+		gettext.cpp
+	)
+endif(ENABLE_BOOST_FILESYSTEM AND NOT ENABLE_PANDORA)
 
 # a 'lib' is automatically set in front when creating the library (as in the filename)
 # internal reference is the name given here
@@ -1133,6 +1146,7 @@ set(schema_generator_SRC
 	tools/schema/error_container.cpp
 	tools/schema/tag.cpp
 	filesystem.cpp
+	filesystem_common.cpp
 	loadscreen_empty.cpp
 )
 
@@ -1148,6 +1162,7 @@ set(schema_validator_SRC
 	serialization/validator.cpp
 	tools/schema/tag.cpp
 	filesystem.cpp
+	filesystem_common.cpp
 	config_cache.cpp
 	sha1.cpp
 	loadscreen_empty.cpp

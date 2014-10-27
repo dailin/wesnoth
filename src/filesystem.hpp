@@ -28,6 +28,13 @@
 
 #include "exceptions.hpp"
 
+class config;
+
+struct SDL_RWops;
+
+namespace filesystem {
+	SDL_RWops* load_RWops(const std::string &path);
+
 /** An exception object used when an IO error occurs */
 struct io_exception : public game::error {
 	io_exception() : game::error("") {}
@@ -67,7 +74,7 @@ std::string get_save_index_file();
 std::string get_saves_dir();
 std::string get_intl_dir();
 std::string get_screenshot_dir();
-std::string get_addon_campaigns_dir();
+std::string get_addons_dir();
 
 /**
  * Get the next free filename using "name + number (3 digits) + extension"
@@ -77,24 +84,22 @@ std::string get_next_filename(const std::string& name, const std::string& extens
 void set_user_config_dir(std::string path);
 void set_user_data_dir(std::string path);
 
-const std::string &get_user_config_dir();
-const std::string &get_user_data_dir();
-const std::string &get_cache_dir();
+std::string get_user_config_dir();
+std::string get_user_data_dir();
+std::string get_cache_dir();
 
 std::string get_cwd();
 std::string get_exe_dir();
 
 bool make_directory(const std::string& dirname);
 bool delete_directory(const std::string& dirname, const bool keep_pbl = false);
+bool delete_file(const std::string &filename);
 
 bool looks_like_pbl(const std::string& file);
 
 // Basic disk I/O:
 
-/** Basic disk I/O - read file.
- * The bool relative_from_game_path determines whether relative paths should be treated as relative
- * to the game path (true) or to the current directory from which Wesnoth was run (false).
- */
+/** Basic disk I/O - read file. */
 std::string read_file(const std::string &fname);
 std::istream *istream_file(const std::string &fname);
 std::ostream *ostream_file(std::string const &fname);
@@ -126,8 +131,8 @@ bool is_directory(const std::string& fname);
 /** Returns true if a file or directory with such name already exists. */
 bool file_exists(const std::string& name);
 
-/** Get the creation time of a file. */
-time_t file_create_time(const std::string& fname);
+/** Get the modification time of a file. */
+time_t file_modified_time(const std::string& fname);
 
 /** Returns true if the file ends with '.gz'. */
 bool is_gzip_file(const std::string& filename);
@@ -142,8 +147,8 @@ inline bool is_compressed_file(const std::string& filename) {
 struct file_tree_checksum
 {
 	file_tree_checksum();
-	explicit file_tree_checksum(const class config& cfg);
-	void write(class config& cfg) const;
+	explicit file_tree_checksum(const config& cfg);
+	void write(config& cfg) const;
 	void reset() {nfiles = 0;modified = 0;sum_size=0;}
 	// @todo make variables private!
 	size_t nfiles, sum_size;
@@ -165,7 +170,7 @@ bool ends_with(const std::string& str, const std::string& suffix);
  * Returns the base filename of a file, with directory name stripped.
  * Equivalent to a portable basename() function.
  */
-std::string file_name(const std::string& file);
+std::string base_name(const std::string& file);
 
 /**
  * Returns the directory name of a file, with filename stripped.
@@ -201,10 +206,10 @@ bool is_path_sep(char c);
 struct binary_paths_manager
 {
 	binary_paths_manager();
-	binary_paths_manager(const class config& cfg);
+	binary_paths_manager(const config& cfg);
 	~binary_paths_manager();
 
-	void set_paths(const class config& cfg);
+	void set_paths(const config& cfg);
 
 private:
 	binary_paths_manager(const binary_paths_manager& o);
@@ -284,5 +289,7 @@ public:
 	std::ostream *operator->() { return stream; }
 	~scoped_ostream();
 };
+
+}
 
 #endif

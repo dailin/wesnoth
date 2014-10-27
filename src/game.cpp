@@ -20,7 +20,13 @@
 #include "commandline_options.hpp"
 #include "game_config_manager.hpp"
 #include "game_controller.hpp"
+#include "gettext.hpp"
 #include "gui/dialogs/title_screen.hpp"
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #ifdef DEBUG_WINDOW_LAYOUT_GRAPHS
 #include "gui/widgets/debug.hpp"
 #endif
@@ -32,6 +38,8 @@
 #include "replay.hpp"
 #include "serialization/binary_or_text.hpp"
 #include "serialization/parser.hpp"
+#include "serialization/unicode_cast.hpp"
+
 #include "serialization/validator.hpp"
 #include "statistics.hpp"
 #include "version.hpp"
@@ -40,7 +48,6 @@
 #include <cerrno>
 #include <clocale>
 #include <fstream>
-#include <libintl.h>
 
 #include <boost/foreach.hpp>
 #include <boost/iostreams/copy.hpp>
@@ -96,7 +103,7 @@ static void encode(const std::string & input_file, const std::string & output_fi
 		boost::iostreams::copy(ifile, stream);
 		ifile.close();
 		safe_exit(remove(input_file.c_str()));
-	}  catch(io_exception& e) {
+	}  catch(filesystem::io_exception& e) {
 		std::cerr << "IO error: " << e.what() << "\n";
 	}
 }
@@ -115,7 +122,7 @@ static void decode(const std::string & input_file, const std::string & output_fi
 		boost::iostreams::copy(stream, ofile);
 		ifile.close();
 		safe_exit(remove(input_file.c_str()));
-	}  catch(io_exception& e) {
+	}  catch(filesystem::io_exception& e) {
 		std::cerr << "IO error: " << e.what() << "\n";
 	}
 }
@@ -146,7 +153,7 @@ static void handle_preprocess_command(const commandline_options& cmdline_opts)
 
 	if( cmdline_opts.preprocess_input_macros ) {
 		std::string file = *cmdline_opts.preprocess_input_macros;
-		if ( file_exists( file ) == false )
+		if ( filesystem::file_exists( file ) == false )
 		{
 			std::cerr << "please specify an existing file. File "<< file <<" doesn't exist.\n";
 			return;
@@ -157,7 +164,7 @@ static void handle_preprocess_command(const commandline_options& cmdline_opts)
 		config cfg;
 
 		try {
-			scoped_istream stream = istream_file( file );
+			filesystem::scoped_istream stream = filesystem::istream_file( file );
 			read( cfg, *stream );
 		} catch (config::error & e) {
 			std::cerr << "Caught a config error while parsing file '" << file << "':\n" << e.message << std::endl;
@@ -248,7 +255,7 @@ static void handle_preprocess_command(const commandline_options& cmdline_opts)
 		std::cerr << "writing '" << outputPath << "' with "
 			<< defines_map.size() << " defines.\n";
 
-		scoped_ostream out = ostream_file(outputPath);
+		filesystem::scoped_ostream out = filesystem::ostream_file(outputPath);
 		if (!out->fail())
 		{
 			config_writer writer(*out,false);
@@ -272,17 +279,17 @@ static int process_command_args(const commandline_options& cmdline_opts) {
 	// Options that don't change behavior based on any others should be checked alphabetically below.
 
 	if(cmdline_opts.userconfig_dir) {
-		set_user_config_dir(*cmdline_opts.userconfig_dir);
+		filesystem::set_user_config_dir(*cmdline_opts.userconfig_dir);
 	}
 	if(cmdline_opts.userconfig_path) {
-		std::cout << get_user_config_dir() << '\n';
+		std::cout << filesystem::get_user_config_dir() << '\n';
 		return 0;
 	}
 	if(cmdline_opts.userdata_dir) {
-		set_user_data_dir(*cmdline_opts.userdata_dir);
+		filesystem::set_user_data_dir(*cmdline_opts.userdata_dir);
 	}
 	if(cmdline_opts.userdata_path) {
-		std::cout << get_user_data_dir() << '\n';
+		std::cout << filesystem::get_user_data_dir() << '\n';
 		return 0;
 	}
 	if(cmdline_opts.data_dir) {
@@ -296,10 +303,10 @@ static int process_command_args(const commandline_options& cmdline_opts) {
 #endif
 			game_config::path = datadir;
 		} else {
-			game_config::path = get_cwd() + '/' + datadir;
+			game_config::path = filesystem::get_cwd() + '/' + datadir;
 		}
 
-		if(!is_directory(game_config::path)) {
+		if(!filesystem::is_directory(game_config::path)) {
 			std::cerr << "Could not find directory '" << game_config::path << "'\n";
 			throw config::error("directory not found");
 		}
@@ -315,7 +322,7 @@ static int process_command_args(const commandline_options& cmdline_opts) {
 	}
 	if(cmdline_opts.gunzip) {
 		const std::string input_file(*cmdline_opts.gunzip);
-		if(!is_gzip_file(input_file)) {
+		if(!filesystem::is_gzip_file(input_file)) {
 			std::cerr << "file '" << input_file << "'isn't a .gz file\n";
 			return 2;
 		}
@@ -325,7 +332,7 @@ static int process_command_args(const commandline_options& cmdline_opts) {
 	}
 	if(cmdline_opts.bunzip2) {
 		const std::string input_file(*cmdline_opts.bunzip2);
-		if(!is_bzip2_file(input_file)) {
+		if(!filesystem::is_bzip2_file(input_file)) {
 			std::cerr << "file '" << input_file << "'isn't a .bz2 file\n";
 			return 2;
 		}
@@ -396,7 +403,7 @@ static int process_command_args(const commandline_options& cmdline_opts) {
 /**
  * I would prefer to setup locale first so that early error
  * messages can get localized, but we need the game_controller
- * initialized to have get_intl_dir() to work.  Note: setlocale()
+ * initialized to have filesystem::get_intl_dir() to work.  Note: setlocale()
  * does not take GUI language setting into account.
  */
 static void init_locale() {
@@ -404,14 +411,12 @@ static void init_locale() {
 	    setlocale(LC_ALL, "English");
 	#else
 		std::setlocale(LC_ALL, "C");
-		std::setlocale(LC_MESSAGES, "");
+		translation::init();
 	#endif
-	const std::string& intl_dir = get_intl_dir();
-	bindtextdomain (PACKAGE, intl_dir.c_str());
-	bind_textdomain_codeset (PACKAGE, "UTF-8");
-	bindtextdomain (PACKAGE "-lib", intl_dir.c_str());
-	bind_textdomain_codeset (PACKAGE "-lib", "UTF-8");
-	textdomain (PACKAGE);
+	const std::string& intl_dir = filesystem::get_intl_dir();
+	translation::bind_textdomain(PACKAGE, intl_dir.c_str(), "UTF-8");
+	translation::bind_textdomain(PACKAGE "-lib", intl_dir.c_str(), "UTF-8");
+	translation::set_default_textdomain(PACKAGE);
 }
 
 /**
@@ -436,19 +441,19 @@ static void warn_early_init_failure()
  * Setups the game environment and enters
  * the titlescreen or game loops.
  */
-static int do_gameloop(int argc, char** argv)
+static int do_gameloop(const std::vector<std::string>& args)
 {
 	srand(time(NULL));
 
-	commandline_options cmdline_opts = commandline_options(argc,argv);
-	game_config::wesnoth_program_dir = directory_name(argv[0]);
+	commandline_options cmdline_opts = commandline_options(args);
+	game_config::wesnoth_program_dir = filesystem::directory_name(args[0]);
 	int finished = process_command_args(cmdline_opts);
 	if(finished != -1) {
 		return finished;
 	}
 
 	boost::scoped_ptr<game_controller> game(
-		new game_controller(cmdline_opts,argv[0]));
+		new game_controller(cmdline_opts,args[0].c_str()));
 	const int start_ticks = SDL_GetTicks();
 
 	init_locale();
@@ -669,6 +674,57 @@ static int do_gameloop(int argc, char** argv)
 		}
 	}
 }
+#ifdef _WIN32
+static bool parse_commandline_argument(const char*& next, const char* end, std::string& res)
+{
+	//strip leading shitespace
+	while(next != end && *next == ' ')
+		++next;
+	if(next == end)
+		return false;
+
+	bool is_excaped = false;
+
+	for(;next != end; ++next)
+	{
+		if(*next == ' ' && !is_excaped) {
+			break;
+		}
+		else if(*next == '"' && !is_excaped) {
+			is_excaped = true;
+			continue;
+		}
+		else if(*next == '"' && is_excaped && next + 1 != end && *(next + 1) == '"') {
+			res.push_back('"');
+			++next;
+			continue;		
+		}
+		else if(*next == '"' && is_excaped ) {
+			is_excaped = false;
+			continue;	
+		}
+		else {
+			res.push_back(*next);
+		}
+	}
+	return true;
+}
+
+static std::vector<std::string> parse_commandline_arguments(std::string input)
+{
+	const char* start = &input[0];
+	const char* end = start + input.size();
+	std::string buffer;
+	std::vector<std::string> res;
+	
+	while(parse_commandline_argument(start, end, buffer))
+	{
+		res.push_back(std::string());
+		res.back().swap(buffer);
+	}
+	return res;
+}
+#endif
 
 
 #ifdef __native_client__
@@ -700,7 +756,19 @@ int main(int argc, char** argv)
 		execv(argv[0], argv);
 	}
 #endif
-
+#ifdef _WIN32
+	(void)argc;
+	(void)argv;
+	//windows argv is ansi encoded by default
+	std::vector<std::string> args = parse_commandline_arguments(unicode_cast<std::string>(std::wstring(GetCommandLineW())));
+#else
+	std::vector<std::string> args;
+	for(int i = 0; i < argc; ++i)
+	{
+		args.push_back(std::string(argv[i]));
+	}
+#endif
+	assert(!args.empty());
 	if(SDL_Init(SDL_INIT_TIMER) < 0) {
 		fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
 		return(1);
@@ -711,7 +779,7 @@ int main(int argc, char** argv)
 		const time_t t = time(NULL);
 		std::cerr << "Started on " << ctime(&t) << "\n";
 
-		const std::string& exe_dir = get_exe_dir();
+		const std::string& exe_dir = filesystem::get_exe_dir();
 		if(!exe_dir.empty()) {
 			// Try to autodetect the location of the game data dir. Note that
 			// the root of the source tree currently doubles as the data dir.
@@ -719,13 +787,13 @@ int main(int argc, char** argv)
 
 			// scons leaves the resulting binaries at the root of the source
 			// tree by default.
-			if(file_exists(exe_dir + "/data/_main.cfg")) {
+			if(filesystem::file_exists(exe_dir + "/data/_main.cfg")) {
 				auto_dir = exe_dir;
 			}
 			// cmake encourages creating a subdir at the root of the source
 			// tree for the build, and the resulting binaries are found in it.
-			else if(file_exists(exe_dir + "/../data/_main.cfg")) {
-				auto_dir = normalize_path(exe_dir + "/..");
+			else if(filesystem::file_exists(exe_dir + "/../data/_main.cfg")) {
+				auto_dir = filesystem::normalize_path(exe_dir + "/..");
 			}
 
 			if(!auto_dir.empty()) {
@@ -735,7 +803,7 @@ int main(int argc, char** argv)
 			}
 		}
 
-		const int res = do_gameloop(argc,argv);
+		const int res = do_gameloop(args);
 		safe_exit(res);
 	} catch(boost::program_options::error& e) {
 		std::cerr << "Error in command line: " << e.what() << '\n';
