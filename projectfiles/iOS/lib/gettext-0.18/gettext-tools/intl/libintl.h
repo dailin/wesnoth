@@ -422,11 +422,10 @@ extern int vswprintf (wchar_t *, size_t, const wchar_t *, va_list);
 
 /* Support for the locale chosen by the user.  */
 #if (defined __APPLE__ && defined __MACH__) || defined _WIN32 || defined __WIN32__ || defined __CYGWIN__
-/* dailin
 #undef setlocale
 #define setlocale libintl_setlocale
 extern char *setlocale (int, const char *);
-*/
+
 #if 0
 
 #undef newlocale

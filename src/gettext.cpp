@@ -24,7 +24,13 @@
 #include <windows.h>
 #endif
 
-#include "SDL.h"
+#ifdef __APPLE__
+#include <cerrno>
+#ifdef setlocale
+// Someone in libintl world decided it was a good idea to define a "setlocale" macro.
+#undef setlocale
+#endif
+#endif
 
 #define DBG_G LOG_STREAM(debug, lg::general)
 #define LOG_G LOG_STREAM(info, lg::general)
@@ -133,11 +139,9 @@ void set_language(const std::string& slocale, const std::vector<std::string>* al
 	// FIXME: add configure check for unsetenv
 	unsetenv ("LANGUAGE"); // void so no return value to check
 #ifdef __APPLE__
-#ifndef __IPHONEOS__
 	if (setenv("LANG", locale.c_str(), 1) == -1) {
 		ERR_G << "setenv LANG failed: " << strerror(errno);
 	}
-#endif
 #endif
 
 	char *res = NULL;
@@ -161,7 +165,7 @@ void set_language(const std::string& slocale, const std::vector<std::string>* al
 		for (int j = 0; j != 3; ++j)
 		{
 			locale = lang + encoding[j] + extra;
-			res = std::setlocale(LC_MESSAGES, locale.c_str());
+            res = std::setlocale(LC_MESSAGES, locale.c_str());
 
 			if (res) {
 				LOG_G << "Set locale to '" << locale << "' result: '" << res << "'.\n";
@@ -180,8 +184,7 @@ void set_language(const std::string& slocale, const std::vector<std::string>* al
 void init()
 {
 #ifndef _WIN32
-	std::setlocale(LC_MESSAGES, "");
-
+    std::setlocale(LC_MESSAGES, "");
 #endif
 }
 

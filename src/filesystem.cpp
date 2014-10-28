@@ -540,6 +540,8 @@ void set_user_data_dir(std::string path)
 		}
 		user_data_dir = be_path.Path();
 	}
+#elif defined(__IPHONEOS__)
+    user_data_dir = iOSPathManager::getDocPath();
 #else
 	const char* home_str = getenv("HOME");
 	std::string home = home_str ? home_str : ".";
@@ -600,17 +602,21 @@ static void setup_user_data_dir()
 	closedir(dir);
 
 	// Create user data and add-on directories
+#ifndef __IPHONEOS__
 	create_directory_if_missing(dir_path + "/editor");
 	create_directory_if_missing(dir_path + "/editor/maps");
 	create_directory_if_missing(dir_path + "/editor/scenarios");
 	create_directory_if_missing(dir_path + "/data");
 	create_directory_if_missing(dir_path + "/data/add-ons");
-#ifdef __IPHONEOS__
-    create_directory_if_missing(iOSPathManager::getDocPath() + "/saves");
-#else
     create_directory_if_missing(dir_path + "/saves");
-#endif	
     create_directory_if_missing(dir_path + "/persist");
+#else
+    create_directory_if_missing(dir_path + "/data");
+    create_directory_if_missing(dir_path + "/data/add-ons");
+    create_directory_if_missing(dir_path + "/saves");
+    create_directory_if_missing(dir_path + "/persist");
+
+#endif
 #endif
 }
 

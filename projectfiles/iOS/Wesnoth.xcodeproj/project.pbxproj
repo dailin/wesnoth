@@ -12,7 +12,6 @@
 		3C435C1E19FE491A0050BA87 /* filesystem_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C435C1C19FE491A0050BA87 /* filesystem_common.cpp */; };
 		3C435C3F19FE6A2C0050BA87 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C435C2419FE69C20050BA87 /* libSDL_mixer.a */; };
 		3C435C4119FE6F720050BA87 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 3C435C4019FE6F720050BA87 /* sounds */; };
-		3C435C4319FE6F7F0050BA87 /* po in Resources */ = {isa = PBXBuildFile; fileRef = 3C435C4219FE6F7F0050BA87 /* po */; };
 		3C4E5C9E19F4A5B400D8046D /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E5C9D19F4A5B400D8046D /* Appirater.m */; };
 		3C4E5CA319F4A9E300D8046D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C4E5CA219F4A9E300D8046D /* AudioToolbox.framework */; };
 		3C4E619519F4AD8E00D8046D /* .clang-format in Resources */ = {isa = PBXBuildFile; fileRef = 3C4E5CA819F4AD8800D8046D /* .clang-format */; };
@@ -563,6 +562,7 @@
 		3C81059719F8E1DC00AD9320 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C81059219F8E1CA00AD9320 /* libjpeg.a */; };
 		3C81059819F8E1DC00AD9320 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C81058C19F8E1C100AD9320 /* libpng.a */; };
 		3CAF2FE119F9FFF9004DE0F6 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CAF2FE019F9FFF9004DE0F6 /* libbz2.dylib */; };
+		3CD799DD19FE90CA00E24B92 /* translations in Resources */ = {isa = PBXBuildFile; fileRef = 3CD799DC19FE90C900E24B92 /* translations */; };
 		3CEDAFC119F8A54C0047608C /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CE710E419F7A37500657B00 /* libSDL.a */; };
 		3CEDAFC319F8A5670047608C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CEDAFC219F8A5670047608C /* OpenGLES.framework */; };
 		3CEDAFDE19F8A9DB0047608C /* libcairo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CEDAFC919F8A9B90047608C /* libcairo.a */; };
@@ -873,7 +873,6 @@
 		3C435C1C19FE491A0050BA87 /* filesystem_common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filesystem_common.cpp; sourceTree = "<group>"; };
 		3C435C1F19FE69C10050BA87 /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = "lib/SDL_mixer-1.2.12/Xcode-iOS/SDL_mixer.xcodeproj"; sourceTree = "<group>"; };
 		3C435C4019FE6F720050BA87 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = ../../sounds; sourceTree = "<group>"; };
-		3C435C4219FE6F7F0050BA87 /* po */ = {isa = PBXFileReference; lastKnownFileType = folder; name = po; path = ../../po; sourceTree = "<group>"; };
 		3C4E5C9C19F4A5B400D8046D /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
 		3C4E5C9D19F4A5B400D8046D /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
 		3C4E5CA219F4A9E300D8046D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -1978,6 +1977,7 @@
 		3C81058719F8E1C100AD9320 /* png.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = png.xcodeproj; path = Wesnoth/lib/png/png.xcodeproj; sourceTree = "<group>"; };
 		3C81058D19F8E1C900AD9320 /* jpeg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = jpeg.xcodeproj; path = Wesnoth/lib/jpeg/jpeg.xcodeproj; sourceTree = "<group>"; };
 		3CAF2FE019F9FFF9004DE0F6 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		3CD799DC19FE90C900E24B92 /* translations */ = {isa = PBXFileReference; lastKnownFileType = folder; name = translations; path = ../../translations; sourceTree = "<group>"; };
 		3CE710DC19F7A37400657B00 /* SDLiPhoneOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDLiPhoneOS.xcodeproj; path = "lib/SDL-1.3/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj"; sourceTree = "<group>"; };
 		3CEDAFC219F8A5670047608C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		3CEDAFC419F8A9B90047608C /* cairo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cairo.xcodeproj; path = Wesnoth/lib/cairo/cairo.xcodeproj; sourceTree = "<group>"; };
@@ -3680,7 +3680,7 @@
 		3CAF2FF119FA2BFE004DE0F6 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				3C435C4219FE6F7F0050BA87 /* po */,
+				3CD799DC19FE90C900E24B92 /* translations */,
 				3C435C4019FE6F720050BA87 /* sounds */,
 				3CF3049019FCA6DF0002E92A /* icons */,
 				3CF3049119FCA6DF0002E92A /* images */,
@@ -4111,7 +4111,6 @@
 				3CF3048F19FCA6CE0002E92A /* data in Resources */,
 				3C435C4119FE6F720050BA87 /* sounds in Resources */,
 				3C4E626B19F4AD8E00D8046D /* .gitignore in Resources */,
-				3C435C4319FE6F7F0050BA87 /* po in Resources */,
 				3C4E628A19F4AD8E00D8046D /* .gitignore in Resources */,
 				3C4E62A919F4AD8E00D8046D /* .gitignore in Resources */,
 				3C4E61A519F4AD8E00D8046D /* .gitignore in Resources */,
@@ -4121,6 +4120,7 @@
 				3C4E61B619F4AD8E00D8046D /* .gitignore in Resources */,
 				3CF3048519FCA6C10002E92A /* fonts in Resources */,
 				3C4E63DB19F4AD8E00D8046D /* foreach.tpp in Resources */,
+				3CD799DD19FE90CA00E24B92 /* translations in Resources */,
 				3C4E638C19F4AD8E00D8046D /* .gitignore in Resources */,
 				3C4E61CD19F4AD8E00D8046D /* .gitignore in Resources */,
 				3C4E61CC19F4AD8E00D8046D /* SConstruct in Resources */,
@@ -4865,6 +4865,7 @@
 					"\"$(SRCROOT)/lib/SDL_mixer-1.2.12\"",
 				);
 				INFOPLIST_FILE = Wesnoth/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = battleforwesnoth;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4899,6 +4900,7 @@
 					"\"$(SRCROOT)/lib/SDL_mixer-1.2.12\"",
 				);
 				INFOPLIST_FILE = Wesnoth/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = battleforwesnoth;
 				TARGETED_DEVICE_FAMILY = "1,2";
