@@ -556,7 +556,7 @@
 		3C4E63FD19F4AD8E00D8046D /* textbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E618C19F4AD8E00D8046D /* textbox.cpp */; };
 		3C4E63FE19F4AD8E00D8046D /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E618E19F4AD8E00D8046D /* widget.cpp */; };
 		3C4E640019F4AD8E00D8046D /* wml_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E619219F4AD8E00D8046D /* wml_exception.cpp */; };
-		3C6D316019FA3349004DF3E0 /* iOSPathManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3C6D315E19FA3349004DF3E0 /* iOSPathManager.mm */; };
+		3C6D316019FA3349004DF3E0 /* iOSManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3C6D315E19FA3349004DF3E0 /* iOSManager.mm */; };
 		3C81053C19F8DC2F00AD9320 /* libiconv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C81053919F8DC1C00AD9320 /* libiconv.a */; };
 		3C81058619F8E12700AD9320 /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C81058119F8E11600AD9320 /* libSDL_image.a */; };
 		3C81059719F8E1DC00AD9320 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C81059219F8E1CA00AD9320 /* libjpeg.a */; };
@@ -1970,8 +1970,8 @@
 		3C4E619219F4AD8E00D8046D /* wml_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wml_exception.cpp; sourceTree = "<group>"; };
 		3C4E619319F4AD8E00D8046D /* wml_exception.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wml_exception.hpp; sourceTree = "<group>"; };
 		3C4E619419F4AD8E00D8046D /* wml_separators.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wml_separators.hpp; sourceTree = "<group>"; };
-		3C6D315E19FA3349004DF3E0 /* iOSPathManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iOSPathManager.mm; sourceTree = "<group>"; };
-		3C6D315F19FA3349004DF3E0 /* iOSPathManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iOSPathManager.h; sourceTree = "<group>"; };
+		3C6D315E19FA3349004DF3E0 /* iOSManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iOSManager.mm; sourceTree = "<group>"; };
+		3C6D315F19FA3349004DF3E0 /* iOSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iOSManager.h; sourceTree = "<group>"; };
 		3C81053419F8DC1C00AD9320 /* iconv.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = iconv.xcodeproj; path = Wesnoth/lib/iconv/iconv.xcodeproj; sourceTree = "<group>"; };
 		3C81057B19F8E11600AD9320 /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = Wesnoth/lib/SDL_image/SDL_image.xcodeproj; sourceTree = "<group>"; };
 		3C81058719F8E1C100AD9320 /* png.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = png.xcodeproj; path = Wesnoth/lib/png/png.xcodeproj; sourceTree = "<group>"; };
@@ -3603,8 +3603,8 @@
 		3C6D315D19FA31D6004DF3E0 /* iOS_Support */ = {
 			isa = PBXGroup;
 			children = (
-				3C6D315E19FA3349004DF3E0 /* iOSPathManager.mm */,
-				3C6D315F19FA3349004DF3E0 /* iOSPathManager.h */,
+				3C6D315E19FA3349004DF3E0 /* iOSManager.mm */,
+				3C6D315F19FA3349004DF3E0 /* iOSManager.h */,
 			);
 			name = iOS_Support;
 			sourceTree = "<group>";
@@ -4278,7 +4278,7 @@
 				3C4E61F219F4AD8E00D8046D /* clipboard.cpp in Sources */,
 				3C4E637319F4AD8E00D8046D /* validator.cpp in Sources */,
 				3C4E63C419F4AD8E00D8046D /* exploder_cutter.cpp in Sources */,
-				3C6D316019FA3349004DF3E0 /* iOSPathManager.mm in Sources */,
+				3C6D316019FA3349004DF3E0 /* iOSManager.mm in Sources */,
 				3C4E626319F4AD8E00D8046D /* stacked_widget.cpp in Sources */,
 				3C4E620719F4AD8E00D8046D /* mouse_action_item.cpp in Sources */,
 				3C4E639719F4AD8E00D8046D /* terrain_filter.cpp in Sources */,

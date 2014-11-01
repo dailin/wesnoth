@@ -23,6 +23,10 @@
 
 static lg::log_domain log_display("display");
 #define WRN_DP LOG_STREAM(warn, log_display)
+#ifdef __IPHONEOS__
+extern bool gMegamap;
+extern bool gIsDragging;
+#endif
 
 namespace events {
 
@@ -61,6 +65,10 @@ mouse_handler_base::mouse_handler_base() :
 	scroll_start_x_(0),
 	scroll_start_y_(0),
 	scroll_started_(false)
+#ifdef __IPHONEOS__
+    ,didDrag_(false),
+    last_clicked_hex_()
+#endif
 {
 }
 
@@ -120,10 +128,49 @@ bool mouse_handler_base::mouse_motion_default(int x, int y, bool /*update*/)
 					+ std::pow(static_cast<double>(drag_from_y_- my), 2);
 			if (drag_distance > drag_threshold()*drag_threshold()) {
 				dragging_started_ = true;
+#ifdef __IPHONEOS__
+                dragged_x_ = 0;
+                dragged_y_ = 0;
+#else
 				cursor::set_dragging(true);
+#endif
 			}
 		}
 	}
+    
+#ifdef __IPHONEOS__
+    if (is_dragging() && dragging_started_ && dragging_left_)
+    {
+        SDL_GetMouseState(&mx,&my);
+        int dx = drag_from_x_ - mx;
+        int dy = drag_from_y_ - my;
+        int scrollChangeX = -dragged_x_ + dx;
+        int scrollChangeY = -dragged_y_ + dy;
+        gui().scroll(scrollChangeX, scrollChangeY);
+        dragged_x_ = dx;
+        dragged_y_ = dy;
+        didDrag_ = true;
+        gIsDragging = true;
+        // KP: fixes #5
+        unsigned long curTime = SDL_GetTicks();
+        if ((curTime - drag_start_time_) > 100) // update velocity every 1/10 second
+        {
+            float seconds = (float)(curTime - drag_start_time_) / 1000;
+            float xVelocity = (float)-dragged_x_ / seconds;
+            float yVelocity = (float)-dragged_y_ / seconds;
+            
+            drag_last_xVelocity_ = xVelocity;
+            drag_last_yVelocity_ = yVelocity;
+            
+            drag_start_time_ = curTime;
+            drag_from_x_ = mx;
+            drag_from_y_ = my;
+            dragged_x_ = 0;
+            dragged_y_ = 0;
+        }
+        //return true;
+    }
+#endif
 	return false;
 }
 
@@ -248,6 +295,7 @@ bool mouse_handler_base::right_click_show_menu(int /*x*/, int /*y*/, const bool 
 	return true;
 }
 
+#ifndef __IPHONEOS__
 bool mouse_handler_base::left_click(int x, int y, const bool /*browse*/)
 {
 	if(tooltips::click(x,y))
@@ -264,7 +312,56 @@ bool mouse_handler_base::left_click(int x, int y, const bool /*browse*/)
 	}
 	return false;
 }
+#else
+bool mouse_handler_base::left_click(int x, int y, const bool /*browse*/)
+{
+    if (gMegamap == true)
+    {
+        const map_location& loc = gui().megamap_location_on(x, y);
+        if(loc.valid()) {
+            minimap_scrolling_ = true;
+            last_hex_ = loc;
+            gui().scroll_to_tile(loc, display::WARP, false);
+            gMegamap = false;
+            cancel_dragging();
+            dragged_x_ = 0;
+            dragged_y_ = 0;
+            didDrag_ = false;
+            gIsDragging = false;
+            drag_start_time_ = 0;
+            scroll_velocity_x_ = 0;
+            scroll_velocity_y_ = 0;
+            drag_last_xVelocity_ = 0;
+            drag_last_yVelocity_ = 0;
+            minimap_scrolling_ = false;
+            
+            //            gui().redraw_background_ = true;
+            //            gui().panelsDrawn_ = false;
+            //            if (isReplay)
+            gui().redraw_everything();
+            return true;
+        }
+        
+        return false;
+    }
+    else {
 
+        if(tooltips::click(x,y))
+            return true;
+        
+        // clicked on a hex on the minimap? then initiate minimap scrolling
+        const map_location& loc = gui().minimap_location_on(x, y);
+        minimap_scrolling_ = false;
+        if(loc.valid()) {
+            gMegamap = true;
+            return true;
+        }
+        return false;
+    }
+}
+
+#endif
+    
 void mouse_handler_base::move_action(const bool /*browse*/)
 {
 	// Overridden with unit move code elsewhere
@@ -272,6 +369,29 @@ void mouse_handler_base::move_action(const bool /*browse*/)
 
 void mouse_handler_base::left_drag_end(int /*x*/, int /*y*/, const bool browse)
 {
+#ifdef __IPHONEOS__
+    unsigned long endTime = SDL_GetTicks();
+    float seconds = (float)(endTime - drag_start_time_) / 1000;
+    float xVelocity, yVelocity;
+    bool flag;
+    if (seconds < 0.25)
+    {
+        xVelocity = drag_last_xVelocity_;
+        yVelocity = drag_last_yVelocity_;
+        flag = true;
+        gIsDragging = true;
+    }
+    else
+    {
+        //xVelocity = (float)-dragged_x_ / seconds;
+        //yVelocity = (float)-dragged_y_ / seconds;
+        xVelocity = 0;
+        yVelocity = 0;
+        flag = false;
+        gIsDragging = false;
+    }
+    gui().set_scroll_velocity(xVelocity, yVelocity,flag);
+#endif
 	move_action(browse);
 }
 
@@ -332,7 +452,12 @@ void mouse_handler_base::cancel_dragging()
 	dragging_started_ = false;
 	dragging_left_ = false;
 	dragging_right_ = false;
+#ifdef __IPHONEOS__
+    gIsDragging = false;
+    gui().set_scroll_velocity(0, 0, false);
+#else
 	cursor::set_dragging(false);
+#endif
 }
 
 void mouse_handler_base::clear_dragging(const SDL_MouseButtonEvent& event, bool browse)

@@ -28,6 +28,10 @@
 static lg::log_domain log_display("display");
 #define ERR_DP LOG_STREAM(err, log_display)
 
+#ifdef __IPHONEOS__
+extern bool gMegamap;
+#endif
+
 controller_base::controller_base(
 		const int ticks, const config& game_config, CVideo& /*video*/) :
 	game_config_(game_config),
@@ -52,6 +56,21 @@ void controller_base::handle_event(const SDL_Event& event)
 	if(gui::in_dialog()) {
 		return;
 	}
+    
+#ifdef __IPHONEOS__
+    if (gMegamap)
+    {
+        if (event.type == SDL_MOUSEBUTTONUP)
+        {
+            int x = event.button.x;
+            int y = event.button.y;
+            get_mouse_handler_base().left_click(x, y, false);
+            
+        }
+        return;
+    }
+#endif
+
 
 	switch(event.type) {
 	case SDL_KEYDOWN:

@@ -35,8 +35,6 @@
 #include "SDL_uikitwindow.h"
 #endif
 
-extern int IOS_SCREEN_WIDTH;
-extern int IOS_SCREEN_HEIGHT;
 @implementation SDL_uikitview
 
 - (void)dealloc

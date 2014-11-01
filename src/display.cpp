@@ -61,6 +61,14 @@ static lg::log_domain log_display("display");
 #define LOG_DP LOG_STREAM(info, log_display)
 #define DBG_DP LOG_STREAM(debug, log_display)
 
+#ifdef __IPHONEOS__
+#include "iOSManager.h"
+#define SCROLL_FRICTION	1000.0f
+#define QUICK_SCROLL
+bool gIsDragging = false;
+bool gMegamap = false;
+#endif
+
 namespace {
 	const int DefaultZoom = game_config::tile_size;
 	const int SmallZoom   = DefaultZoom / 2;
@@ -206,6 +214,11 @@ display::display(unit_map* units, CVideo& video, const gamemap* map, const std::
 #if defined(__GLIBC__)
 	, do_reverse_memcpy_workaround_(false)
 #endif
+#ifdef __IPHONEOS__
+    ,scroll_velocity_x_(0),
+    scroll_velocity_y_(0),
+    start_scroll_(false)
+#endif
 {
 	singleton_ = this;
 
@@ -225,7 +238,9 @@ display::display(unit_map* units, CVideo& video, const gamemap* map, const std::
 	set_idle_anim_rate(preferences::idle_anim_rate());
 
 	image::set_zoom(zoom_);
-
+#ifdef __IPHONEOS__
+    gMegamap = false;
+#endif
 	init_flags();
 
 #if defined(__GLIBC__) && !SDL_VERSION_ATLEAST(2,0,0)
@@ -1349,6 +1364,7 @@ void display::flip()
 		update_rect(r);
 	}
 
+#ifndef __IPHONEOS__
 	font::draw_floating_labels(frameBuffer);
 	events::raise_volatile_draw_event();
 	cursor::draw(frameBuffer);
@@ -1358,6 +1374,18 @@ void display::flip()
 	cursor::undraw(frameBuffer);
 	events::raise_volatile_undraw_event();
 	font::undraw_floating_labels(frameBuffer);
+#else
+    if (!gMegamap)
+    {
+        font::draw_floating_labels(frameBuffer);
+    }
+    events::raise_volatile_draw_event();
+    
+    video().flip();
+    
+    events::raise_volatile_undraw_event();
+    font::undraw_floating_labels(frameBuffer);
+#endif
 }
 
 void display::update_display()
@@ -1691,7 +1719,75 @@ void display::draw_wrap(bool update, bool force)
 {
 	static const int time_between_draws = preferences::draw_delay();
 	const int current_time = SDL_GetTicks();
-	const int wait_time = nextDraw_ - current_time;
+	int wait_time = nextDraw_ - current_time;
+
+#ifdef __IPHONEOS__
+    // ensure responsive map scrolling
+    if (wait_time < 10)
+        wait_time = 10;
+    
+    
+    // update scroll velocity
+    if (scroll_velocity_x_ != 0 || scroll_velocity_y_ != 0)
+    {
+        float lastX = xposf_;
+        float lastY = yposf_;
+        float seconds = (float)(current_time-scroll_velocity_last_update_)/1000;
+        float newX = lastX + scroll_velocity_x_*seconds;
+        float newY = lastY + scroll_velocity_y_*seconds;
+        int diffX = newX - lastX;
+        int diffY = newY - lastY;
+        if (diffX != 0 || diffY != 0)
+            scroll(-diffX, -diffY);
+        
+        // some complex 2d math...
+        float vectorLength = sqrt(scroll_velocity_x_*scroll_velocity_x_ + scroll_velocity_y_*scroll_velocity_y_);
+        float directionX = scroll_velocity_x_ / vectorLength;
+        float directionY = scroll_velocity_y_ / vectorLength;
+        if (directionX < 0)
+            directionX = -directionX;
+        if (directionY < 0)
+            directionY = -directionY;
+        
+        
+        if (scroll_velocity_x_ > 0)
+        {
+            scroll_velocity_x_ -= directionX*SCROLL_FRICTION*seconds;
+            if (scroll_velocity_x_ < 0)
+                scroll_velocity_x_ = 0;
+        }
+        else
+        {
+            scroll_velocity_x_ += directionX*SCROLL_FRICTION*seconds;
+            if (scroll_velocity_x_ > 0)
+                scroll_velocity_x_ = 0;
+        }
+        if (scroll_velocity_y_ > 0)
+        {
+            scroll_velocity_y_ -= directionY*SCROLL_FRICTION*seconds;
+            if (scroll_velocity_y_ < 0)
+                scroll_velocity_y_ = 0;
+        }
+        else
+        {
+            scroll_velocity_y_ += directionY*SCROLL_FRICTION*seconds;
+            if (scroll_velocity_y_ > 0)
+                scroll_velocity_y_ = 0;
+        }
+        
+        xposf_ = newX;
+        yposf_ = newY;
+        scroll_velocity_last_update_ = current_time;
+    }
+    else
+    {
+        if (start_scroll_)
+        {
+            start_scroll_ = false;
+            gIsDragging = false;
+        }
+    }
+#endif
 
 	if(redrawMinimap_) {
 		redrawMinimap_ = false;
@@ -1700,6 +1796,14 @@ void display::draw_wrap(bool update, bool force)
 
 	if(update) {
 		update_display();
+#ifdef __IPHONEOS__
+        if (gMegamap)
+        {
+            draw_megamap();
+            update_whole_screen();
+        }
+#endif
+
 		if(!force && !benchmark && wait_time > 0) {
 			// If it's not time yet to draw, delay until it is
 			SDL_Delay(wait_time);
@@ -3066,6 +3170,11 @@ std::vector<unit*> display::get_unit_list_for_invalidation() {
 }
 void display::invalidate_animations()
 {
+#ifdef __IPHONEOS__
+    if (gIsDragging)
+        return;
+#endif
+
 	new_animation_frame();
 	animate_map_ = preferences::animate_map();
 	if (animate_map_) {
@@ -3183,6 +3292,130 @@ void display::process_reachmap_changes()
 	reach_map_old_ = reach_map_;
 	reach_map_changed_ = false;
 }
+
+#ifdef __IPHONEOS__
+void display::set_scroll_velocity(float xVelocity, float yVelocity, bool flag)
+{
+    xposf_ = xpos_;
+    yposf_ = ypos_;
+    scroll_velocity_x_ = xVelocity;
+    scroll_velocity_y_ = yVelocity;
+    scroll_velocity_last_update_ = SDL_GetTicks();
+    start_scroll_ = flag;
+}
+
+map_location display::megamap_location_on(int x, int y)
+{
+    //TODO: don't return location for this,
+    // instead directly scroll to the clicked pixel position
+    
+    if (!point_in_rect(x, y, megamap_location_)) {
+        return map_location();
+    }
+    
+    // we transfom the coordinates from minimap to the full map image
+    // probably more adjustements to do (border, minimap shift...)
+    // but the mouse and human capacity to evaluate the rectangle center
+    // is not pixel precise.
+    int px = (x - megamap_location_.x) * get_map().w()*hex_width() / megamap_location_.w;
+    int py = (y - megamap_location_.y) * get_map().h()*hex_size() / megamap_location_.h;
+    
+    map_location loc = pixel_position_to_hex(px, py);
+    if (loc.x < 0)
+        loc.x = 0;
+    else if (loc.x >= get_map().w())
+        loc.x = get_map().w() - 1;
+    
+    if (loc.y < 0)
+        loc.y = 0;
+    else if (loc.y >= get_map().h())
+        loc.y = get_map().h() - 1;
+    
+    return loc;
+}
+
+void display::draw_megamap()
+{
+    int width = iOSManager::getScreenWidth();
+    int height = iOSManager::getScreenHeight();
+    const SDL_Rect bigArea =  {4, 26, width - 88, height - 30};
+    
+    if(megamap_ == NULL) {
+        megamap_ = image::getMinimap(bigArea.w, bigArea.h, get_map(), viewpoint_);
+        if (megamap_ == NULL)
+        {
+            return;
+        }
+    }
+    
+    surface disp(screen_.getSurface());      // Screen surface.
+    SDL_Rect area = {0,  22, width - 80, height - 22}; // Screen area.
+    sdl_fill_rect(disp,&area,SDL_MapRGB(disp->format,0,0,0));
+    megamap_location_.x = area.x + (area.w - megamap_->w)/2;
+    megamap_location_.y = area.y + (area.h - megamap_->h)/2;
+    megamap_location_.w = megamap_->w;
+    megamap_location_.h = megamap_->h;
+    screen_.blit_surface(megamap_location_.x, megamap_location_.y, megamap_);
+    
+    draw_megamap_units();
+}
+
+void display::draw_megamap_units()
+{
+    if (is_blindfolded()) return;
+    
+    double xscaling = 1.0 * megamap_location_.w / get_map().w();
+    double yscaling = 1.0 * megamap_location_.h / get_map().h();
+    
+    for(unit_map::const_iterator u = units_->begin(); u != units_->end(); ++u) {
+        if (fogged(u->get_location()) ||
+            ((*teams_)[currentTeam_].is_enemy(u->side()) &&
+             u->invisible(u->get_location())) ||
+            u->get_hidden()) {
+            continue;
+        }
+        
+        int side = u->side();
+        SDL_Color col = team::get_minimap_color(side);
+        
+        if (!preferences::minimap_movement_coding()) {
+            
+            if ((*teams_)[currentTeam_].is_enemy(side)) {
+                col = int_to_color(game_config::color_info(game_config::images::enemy_orb_color).rep());
+            } else {
+                
+                if (currentTeam_ +1 == static_cast<unsigned>(side)) {
+                    
+                    if (u->movement_left() == u->total_movement())
+                        col = int_to_color(game_config::color_info(game_config::images::unmoved_orb_color).rep());
+                    else if (u->movement_left() == 0)
+                        col = int_to_color(game_config::color_info(game_config::images::moved_orb_color).rep());
+                    else
+                        col = int_to_color(game_config::color_info(game_config::images::partmoved_orb_color).rep());
+                    
+                } else
+                    col = int_to_color(game_config::color_info(game_config::images::ally_orb_color).rep());
+            }
+        }
+        
+        const Uint32 mapped_col = SDL_MapRGB(video().getSurface()->format,col.r,col.g,col.b);
+        
+        double u_x = u->get_location().x * xscaling;
+        double u_y = (u->get_location().y + (is_odd(u->get_location().x) ? 1 : -1)/4.0) * yscaling;
+        // use 4/3 to compensate the horizontal hexes imbrication
+        double u_w = 4.0 / 3.0 * xscaling;
+        double u_h = yscaling;
+        
+        SDL_Rect r = create_rect(megamap_location_.x + round_double(u_x)
+                                 , megamap_location_.y + round_double(u_y)
+                                 , round_double(u_w)
+                                 , round_double(u_h));
+        
+        sdl_fill_rect(video().getSurface(), &r, mapped_col);
+    }
+}
+
+#endif
 
 display *display::singleton_ = NULL;
 

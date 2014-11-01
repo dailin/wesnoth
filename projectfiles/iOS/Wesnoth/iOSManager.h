@@ -13,11 +13,13 @@
 #include <string>
 using namespace std;
 
-class iOSPathManager
+class iOSManager
 {
 public:
     static string getAppPath();
     static string getDocPath();
     static string getCachePath();
+    static int getScreenWidth();
+    static int getScreenHeight();
 };
 #endif /* defined(__Wesnoth__iOSPathManager__) */

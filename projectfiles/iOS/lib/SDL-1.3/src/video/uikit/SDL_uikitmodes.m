@@ -25,10 +25,6 @@
 #include "SDL_assert.h"
 #include "SDL_uikitmodes.h"
 
-#ifdef __IPHONEOS__
-int IOS_SCREEN_WIDTH;
-int IOS_SCREEN_HEIGHT;
-#endif
 BOOL SDL_UIKit_supports_multiple_displays = NO;
 
 
@@ -152,9 +148,6 @@ UIKit_AddDisplay(UIScreen *uiscreen)
     mode.w = (int)(size.width * scale);
     mode.h = (int)(size.height * scale);
  
-    IOS_SCREEN_WIDTH = mode.w;
-    IOS_SCREEN_HEIGHT = mode.h;
-
     UIScreenMode * uiscreenmode = nil;
     // UIScreenMode showed up in 3.2 (the iPad and later). We're
     //  misusing this supports_multiple_displays flag here for that.

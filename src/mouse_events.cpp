@@ -496,25 +496,54 @@ void mouse_handler::mouse_wheel_right(int /*x*/, int /*y*/, const bool /*browse*
 void mouse_handler::select_or_action(bool browse)
 {
 	if (!resources::game_map->on_board(last_hex_))
-		return;
+        return;
+    
+    // Load whiteboard partial moves
+    wb::future_map_if_active planned_unit_map;
+    
+    unit_map::iterator clicked_u = find_unit(last_hex_);
+    unit_map::iterator selected_u = find_unit(selected_hex_);
+   
+#ifndef __IPHONEOS__
+    if ( clicked_u != resources::units->end() &&
+        ((selected_u == resources::units->end()) ||
+         (selected_u != resources::units->end() && selected_u->side() != side_num_) ||
+         (clicked_u->side() == side_num_ && clicked_u->id() != selected_u->id())) )
+    {
+        select_hex(last_hex_, false);
+    }
+    else
+    {
+        move_action(browse);
+    }
 
-	// Load whiteboard partial moves
-	wb::future_map_if_active planned_unit_map;
-
-	unit_map::iterator clicked_u = find_unit(last_hex_);
-	unit_map::iterator selected_u = find_unit(selected_hex_);
-	
-	if ( clicked_u != resources::units->end() &&
-		 ((selected_u == resources::units->end()) ||
-		  (selected_u != resources::units->end() && selected_u->side() != side_num_) ||
-		  (clicked_u->side() == side_num_ && clicked_u->id() != selected_u->id())) )
-	{
-		select_hex(last_hex_, false);
-	}
-	else
-	{
-		move_action(browse);
-	}
+#else
+    if ( clicked_u != resources::units->end() &&
+        ((selected_u == resources::units->end()) ||
+         (selected_u != resources::units->end() && selected_u->side() != side_num_) ||
+         (clicked_u->side() == side_num_ && clicked_u->id() != selected_u->id())) )
+    {
+        select_hex(last_hex_, false);
+    }
+    else
+    {
+        if (last_hex_ == selected_hex_)
+        {
+            if ((selected_u != resources::units->end() && selected_u->side() == side_num_))
+            {
+                selected_u->set_goto(map_location());
+            }
+            
+            deselect_hex();
+        }
+        else if (last_hex_ == last_clicked_hex_)
+        {
+            move_action(browse);
+        }
+    }
+    
+    last_clicked_hex_ = last_hex_;
+#endif
 }
 
 void mouse_handler::move_action(bool browse)

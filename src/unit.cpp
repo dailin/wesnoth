@@ -57,6 +57,10 @@ static lg::log_domain log_config("config");
 static lg::log_domain log_enginerefac("enginerefac");
 #define LOG_RG LOG_STREAM(info, log_enginerefac)
 
+#ifdef __IPHONEOS__
+extern bool gIsDragging;
+#endif
+
 namespace {
 	const std::string ModificationTypes[] = { "advance", "trait", "object" };
 	const size_t NumModificationTypes = sizeof(ModificationTypes)/
@@ -3057,7 +3061,12 @@ void unit::refresh()
 			next_idling_ = INT_MAX;
 		}
 	} else {
+#ifdef __IPHONEOS__
+        if (!gIsDragging)
+            set_idling();
+#else
 		set_idling();
+#endif
 	}
 }
 

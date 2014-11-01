@@ -6,24 +6,36 @@
 //  Copyright (c) 2014年 dai lin. All rights reserved.
 //
 
-#include "iOSPathManager.h"
+#include "iOSManager.h"
 #import <UIKit/UIKit.h>
 
-string iOSPathManager::getAppPath()
+string iOSManager::getAppPath()
 {
     return [[[NSBundle mainBundle] resourcePath] UTF8String];
 }
 
-string iOSPathManager::getDocPath()
+string iOSManager::getDocPath()
 {
     NSArray *user_dir_paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *user_dir_documentsDirectory = [user_dir_paths objectAtIndex:0];
     return [user_dir_documentsDirectory UTF8String];
 }
 
-string iOSPathManager::getCachePath()
+string iOSManager::getCachePath()
 {
     NSArray *cache_dir_paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cache_dir_documentsDirectory = [cache_dir_paths objectAtIndex:0];
     return [cache_dir_documentsDirectory UTF8String];
 }
+
+int iOSManager::getScreenWidth()
+{
+    return (int)[UIScreen mainScreen].bounds.size.width;
+}
+
+int iOSManager::getScreenHeight()
+{
+    return (int)[UIScreen mainScreen].bounds.size.height;
+}
+
+

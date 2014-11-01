@@ -63,7 +63,7 @@ BPath be_path;
 #include "version.hpp"
 
 #ifdef __IPHONEOS__
-#include "iOSPathManager.h"
+#include "iOSManager.h"
 #endif
 
 #include <boost/foreach.hpp>
@@ -381,7 +381,7 @@ std::string get_exe_dir()
 {
 #ifndef _WIN32
 #ifdef __IPHONEOS__
-    return iOSPathManager::getAppPath();
+    return iOSManager::getAppPath();
 #else
 	char buf[1024];
 	size_t path_size = readlink("/proc/self/exe", buf, sizeof(buf)-1);
@@ -541,7 +541,7 @@ void set_user_data_dir(std::string path)
 		user_data_dir = be_path.Path();
 	}
 #elif defined(__IPHONEOS__)
-    user_data_dir = iOSPathManager::getDocPath();
+    user_data_dir = iOSManager::getDocPath();
 #else
 	const char* home_str = getenv("HOME");
 	std::string home = home_str ? home_str : ".";

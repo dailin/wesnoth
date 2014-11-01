@@ -603,6 +603,13 @@ public:
 	bool is_blindfolded() const;
 
 	void write(config& cfg) const;
+#ifdef __IPHONEOS__
+    void set_scroll_velocity(float xVelocity, float yVelocity, bool flag);
+    void draw_megamap_units();
+    map_location megamap_location_on(int x, int y);
+    void draw_megamap();
+#endif
+
 private:
 	void read(const config& cfg);
 
@@ -784,7 +791,18 @@ protected:
 
 	/** Local cache for preferences "local_tod_lighting" */
 	bool local_tod_light_;
+    
+#ifdef __IPHONEOS__
+    float xposf_, yposf_;			// duplicated positions, but with fractions for accuracy during scrolling
+    float scroll_velocity_x_;		// pixels/second
+    float scroll_velocity_y_;
+    unsigned long scroll_velocity_last_update_;
+    bool start_scroll_;
+    surface megamap_;
+    SDL_Rect megamap_location_;
 
+#endif
+    
 private:
 
 	// This surface must be freed by the caller
