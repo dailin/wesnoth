@@ -1,6 +1,9 @@
-Version 1.11.18:
+Version 1.11.18+dev:
  * Language and i18n:
-   * Updated translations:
+   * Updated translations: Spanish
+ * Miscellaneous and bug fixes:
+   * For compiling Wesnoth on OS X using Xcode, a new version of
+     wesnoth_compile_mac_1.11.zip is now required.
 
 Version 1.11.18:
  * Add-ons server:
@@ -29,6 +32,7 @@ Version 1.11.18:
      animation frames with no specified image.
    * Fix bug wherein [move_unit] (used by {MOVE_UNIT}) would overwrite another
      unit when the source and destination had an identical x or y value.
+   * Fix bug #22806: missing mouseover info: upkeep
 
 Version 1.11.17:
  * Add-ons server:

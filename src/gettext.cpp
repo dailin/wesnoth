@@ -24,12 +24,11 @@
 #include <windows.h>
 #endif
 
-#ifdef __APPLE__
-#include <cerrno>
+#include <errno.h>
+#ifdef __IPHONEOS__
 #ifdef setlocale
 // Someone in libintl world decided it was a good idea to define a "setlocale" macro.
 #undef setlocale
-#endif
 #endif
 
 #define DBG_G LOG_STREAM(debug, lg::general)
