@@ -143,6 +143,24 @@ private:
 	int side_;
 };
 
+#ifdef __IPHONEOS__
+    class campaign_preview_pane : public gui::preview_pane
+    {
+    public:
+        campaign_preview_pane(CVideo &video,std::vector<std::pair<std::string,std::string> >* descriptions);
+        
+        bool show_above() const;
+        bool left_side() const;
+        void set_selection(int index);
+        
+    private:
+        void draw_contents();
+        
+        const std::vector<std::pair<std::string,std::string> >* descriptions_;
+        std::string desc_text;
+        int index_;
+    };
+#endif
 
 void show_unit_description(const unit_type &t);
 void show_unit_description(const unit &u);

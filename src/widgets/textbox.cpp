@@ -439,7 +439,11 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded)
 	if(!enabled())
 		return;
 
+#ifndef __IPHONEOS__
 	scrollarea::handle_event(event);
+#else
+    scrollarea::handle_drag_event(event, 1);
+#endif
 	if(hidden())
 		return;
 

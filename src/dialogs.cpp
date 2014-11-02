@@ -1521,5 +1521,128 @@ network::connection network_connect_dialog(display& disp, const std::string& msg
 	connect_waiter waiter(disp,cancel_button);
 	return network::connect(hostname,port,waiter);
 }
+    
+
+#ifdef __IPHONEOS__
+    namespace {
+        static const int campaign_preview_border = font::relative_size(10);
+    }
+    campaign_preview_pane::campaign_preview_pane(CVideo &video,std::vector<std::pair<std::string,std::string> >* desc) : gui::preview_pane(video),descriptions_(desc),index_(0)
+    {
+        // size of the campaign info window with the campaign description and image in pixel
+        set_measurements(430, 340);
+        index_ = -1;
+        set_selection(0);
+    }
+    
+    bool campaign_preview_pane::show_above() const { return false; }
+    bool campaign_preview_pane::left_side() const { return false; }
+    
+    void campaign_preview_pane::set_selection(int index)
+    {
+        index = std::min<int>(descriptions_->size()-1,index);
+        if(index != index_ && index >= 0) {
+            index_ = index;
+            //            const SDL_Rect area = {
+            //                location().x+campaign_preview_border,
+            //                location().y,
+            //                location().w-campaign_preview_border*2,
+            //                location().h };
+            //desc_text = font::word_wrap_text((*descriptions_)[index_].first, font::SIZE_SMALL, area.w - 2 * campaign_preview_border);
+            //            desc_text = font::word_wrap_text((*descriptions_)[index_].first, font::SIZE_PLUS, area.w - 2 * campaign_preview_border);
+            set_dirty();
+        }
+    }
+    
+    void campaign_preview_pane::draw_contents()
+    {
+        if (size_t(index_) >= descriptions_->size()) {
+            return;
+        }
+        
+        const SDL_Rect area = {
+            location().x + campaign_preview_border,
+            location().y + campaign_preview_border * 3,
+            location().w - campaign_preview_border * 2,
+            location().h };
+        
+        /* background frame */
+//        gui::dialog_frame f(video(), "", gui::dialog_frame::preview_style, false);
+//        f.layout(area);
+//        f.draw_background();
+//        f.draw_border();
+        
+        /* description text */
+        std::string desc_text;
+        try {
+            desc_text = font::word_wrap_text((*descriptions_)[index_].first, font::SIZE_PLUS, area.w - 2 * campaign_preview_border);
+        } catch (utils::invalid_utf8_exception&) {
+        }
+        //	const std::vector<std::string> lines = utils::split(desc_text, '\n',utils::STRIP_SPACES);
+        SDL_Rect txt_area = { area.x+campaign_preview_border,area.y+campaign_preview_border,0,0 };
+        
+        //	for(std::vector<std::string>::const_iterator line = lines.begin(); line != lines.end(); ++line) {
+        //	  txt_area = font::draw_text(&video(),location(),font::SIZE_SMALL,font::NORMAL_COLOUR,*line,txt_area.x,txt_area.y);
+        //		txt_area.y += txt_area.h;
+        //	}
+        font::draw_text(&video(),location(),font::SIZE_PLUS,font::NORMAL_COLOR,desc_text,txt_area.x,txt_area.y);
+        
+        /* description image */
+        surface img(NULL);
+        const std::string desc_img_name = (*descriptions_)[index_].second;
+        if(!desc_img_name.empty()) {
+            img.assign(image::get_image(desc_img_name));
+        }
+        if (!img.null()) {
+            SDL_Rect src_rect,dst_rect;
+            
+            int max_height = area.h-(txt_area.h+txt_area.y-area.y);
+            
+            // scale the image to fit the area, and preserve aspect ratio
+            SDL_Rect scaledSize;
+            scaledSize.w = img->w;
+            scaledSize.h = img->h;
+            if (scaledSize.w > area.w)
+            {
+                float ratio;
+                ratio = (float)area.w / (float)scaledSize.w;
+                
+                scaledSize.w = ((float)scaledSize.w * ratio);
+                scaledSize.h = ((float)scaledSize.h * ratio);
+            }
+            if (scaledSize.h > max_height)
+            {
+                float ratio;
+                ratio = (float)max_height / (float)scaledSize.h;
+                
+                scaledSize.w = ((float)scaledSize.w * ratio);
+                scaledSize.h = ((float)scaledSize.h * ratio);
+            }
+            if (scaledSize.w != img->w || scaledSize.h != img->h)
+            {
+                img.assign(scale_surface(img,scaledSize.w,scaledSize.h));
+            }
+            
+            
+            
+            src_rect.x = src_rect.y = 0;
+            src_rect.w = std::min<int>(area.w,img->w);
+            src_rect.h = std::min<int>(max_height,img->h);
+            
+            
+            dst_rect.x = area.x+(area.w-src_rect.w)/2;
+            dst_rect.y = txt_area.y+((max_height-src_rect.h)*8)/13;
+            //         if(dst_rect.y - txt_area.h - txt_area.y >= 120) {
+            //for really tall dialogs, just put it under the text
+            dst_rect.y = txt_area.y + font::get_max_height(font::SIZE_PLUS)*6;
+            //         }
+            
+            
+            
+            SDL_BlitSurface(img,&src_rect,video().getSurface(),&dst_rect);
+            
+        }
+    }
+#endif
 
 } // end namespace dialogs

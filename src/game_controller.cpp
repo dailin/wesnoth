@@ -48,6 +48,10 @@
 #include "gui/dialogs/mp_host_game_prompt.hpp"
 
 #include <boost/foreach.hpp>
+#ifdef __IPHONEOS__
+#include "wml_separators.hpp"
+#include "dialogs.hpp"
+#endif
 
 static lg::log_domain log_config("config");
 #define ERR_CONFIG LOG_STREAM(err, log_config)
@@ -575,6 +579,7 @@ void game_controller::mark_completed_campaigns(std::vector<config> &campaigns)
 
 bool game_controller::new_campaign()
 {
+#ifndef __IPHONEOS__
 	state_ = game_state();
 	state_.classification().campaign_type = "scenario";
 
@@ -705,6 +710,163 @@ bool game_controller::new_campaign()
 
 	state_.classification().campaign_define = campaign["define"].str();
 	state_.classification().campaign_xtra_defines = utils::split(campaign["extra_defines"]);
+#else
+    state_ = game_state();
+    state_.classification().campaign_type = "scenario";
+    int index = -1;
+    
+    std::vector<config> campaigns;
+    BOOST_FOREACH(const config& campaign,
+                  resources::config_manager->game_config().child_range("campaign")) {
+        
+        if (campaign["type"] != "mp") {
+            campaigns.push_back(campaign);
+        }
+    }
+    
+    mark_completed_campaigns(campaigns);
+    std::stable_sort(campaigns.begin(),campaigns.end(),less_campaigns_rank);
+    
+    if(campaigns.begin() == campaigns.end()) {
+        gui2::show_error_message(disp().video(),
+                                 _("No campaigns are available.\n"));
+        return false;
+    }
+    
+    
+    if(gui2::new_widgets) {
+        
+    } else {
+        std::vector<std::string> campaign_names;
+        std::vector<std::pair<std::string,std::string> > campaign_desc;
+        BOOST_FOREACH(const config &c, campaigns) {
+            std::stringstream str;
+            /*** Add list item ***/
+            const std::string& icon = c["icon"];
+            const std::string desc = c["description"];
+            const std::string image = c["image"];
+            if(icon.empty()) {
+                str << COLUMN_SEPARATOR;
+            } else {
+                str << IMAGE_PREFIX << icon << COLUMN_SEPARATOR;
+            }
+            
+            str << c["name"];
+            
+            campaign_names.push_back(str.str());
+            campaign_desc.push_back(std::pair<std::string,std::string>(desc,image));
+            
+        }
+        
+        if(campaign_names.size() <= 0) {
+            gui2::show_error_message(disp().video(),
+                                     _("No campaigns are available.\n"));
+            return false;
+        }
+        
+        
+        dialogs::campaign_preview_pane campaign_preview(disp().video(),&campaign_desc);
+        gui::dialog cmenu(disp(), _("Play a campaign"), " ", gui::OK_CANCEL);
+        gui::dialog::dimension_measurements dim = cmenu.layout();
+        cmenu.set_menu(campaign_names);
+        dim = cmenu.layout();
+        cmenu.add_pane(&campaign_preview);
+        dim = cmenu.layout();
+//        Uint16 screen_width = screen_area().w;
+//        Uint16 dialog_width = cmenu.get_frame().get_layout().exterior.w;
+//        if(screen_width < 850 && screen_width - dialog_width > 20) {
+//            // On small resolutions, reduce the amount of unused horizontal space
+//            campaign_preview.set_width(campaign_preview.width() + screen_width - dialog_width - 20);
+//            dim = cmenu.layout();
+//        }
+//        SDL_Rect& preview_loc = dim.panes[&campaign_preview];
+//        dim.menu_y -= 30;//4; //hard code
+//        dim.menu_height += 18;
+//        preview_loc.y = dim.menu_y;
+//
+//        preview_loc.h = cmenu.get_menu().height();
+//        cmenu.set_layout(dim);
+        
+//        SDL_Rect& preview_loc = dim.panes[&campaign_preview];
+//        preview_loc.y = dim.menu_y;
+//        preview_loc.h = 50;
+
+        if(cmenu.show() == -1) {
+            return false;
+        }
+        
+        index = cmenu.result();
+    }
+    
+    const config &campaign = campaigns[index];
+
+    state_.classification().campaign = campaign["id"].str();
+    state_.classification().abbrev = campaign["abbrev"].str();
+    
+    // we didn't specify in the command line the scenario to be started
+    if (jump_to_campaign_.scenario_id_.empty())
+        state_.carryover_sides_start["next_scenario"] = campaign["first_scenario"].str();
+    else
+        state_.carryover_sides_start["next_scenario"] = jump_to_campaign_.scenario_id_;
+    
+    state_.classification().end_text = campaign["end_text"].str();
+    state_.classification().end_text_duration = campaign["end_text_duration"];
+    
+    const std::string difficulty_descriptions = campaign["difficulty_descriptions"];
+    std::vector<std::string> difficulty_options = utils::split(difficulty_descriptions, ';');
+    
+    const std::vector<std::string> difficulties = utils::split(campaign["difficulties"]);
+    
+    if(difficulties.empty() == false) {
+        int difficulty = 0;
+        if (jump_to_campaign_.difficulty_ == -1){
+            if(difficulty_options.size() != difficulties.size()) {
+                difficulty_options.resize(difficulties.size());
+                std::copy(difficulties.begin(),difficulties.end(),difficulty_options.begin());
+            }
+            
+            gui2::tcampaign_difficulty dlg(difficulty_options);
+            dlg.show(disp().video());
+            
+            if(dlg.selected_index() == -1) {
+                if (jump_to_campaign_.campaign_id_.empty() == false)
+                {
+                    jump_to_campaign_.campaign_id_ = "";
+                }
+                // canceled difficulty dialog, relaunch the campaign selection dialog
+                return new_campaign();
+            }
+            difficulty = dlg.selected_index();
+        }
+        else
+        {
+            if (jump_to_campaign_.difficulty_
+                > static_cast<int>(difficulties.size()))
+            {
+                std::cerr << "incorrect difficulty number: [" <<
+                jump_to_campaign_.difficulty_ << "]. maximum is [" <<
+                difficulties.size() << "].\n";
+                return false;
+            }
+            else if (jump_to_campaign_.difficulty_ < 1)
+            {
+                std::cerr << "incorrect difficulty number: [" <<
+                jump_to_campaign_.difficulty_ << "]. minimum is [1].\n";
+                return false;
+            }
+            else
+            {
+                difficulty = jump_to_campaign_.difficulty_ - 1;
+            }
+        }
+        
+        state_.carryover_sides_start["difficulty"] = difficulties[difficulty];
+        state_.classification().difficulty = difficulties[difficulty];
+    }
+    
+    state_.classification().campaign_define = campaign["define"].str();
+    state_.classification().campaign_xtra_defines = utils::split(campaign["extra_defines"]);
+#endif
 
 	return true;
 }
@@ -928,6 +1090,7 @@ bool game_controller::play_multiplayer_commandline()
 
 bool game_controller::change_language()
 {
+#ifndef __IPHONEOS__
 	gui2::tlanguage_selection dlg;
 	dlg.show(disp().video());
 	if (dlg.get_retval() != gui2::twindow::OK) return false;
@@ -937,7 +1100,28 @@ bool game_controller::change_language()
 		wm_title_string += " - " + game_config::revision;
 		SDL_WM_SetCaption(wm_title_string.c_str(), NULL);
 	}
+#else
+    gui::dialog cmenu(disp(), _("Change Language"), _("Choose your preferred language:"), gui::OK_CANCEL);
+    std::vector<std::string> campaign_names;
+    
+    const std::vector<language_def>& languages = get_languages();
+    BOOST_FOREACH(const language_def& lang, languages) {
+        campaign_names.push_back(lang.language);
+        
+    }
+    
+    cmenu.set_menu(campaign_names);
+    
+    if(cmenu.show() == -1) {
+        return false;
+    }
+    
+    ::set_language(languages[cmenu.result()]);
+    preferences::set_language(languages[cmenu.result()].localename);
 
+    preferences::write_preferences();
+    gui::dialog(disp(),"","Please restart wesnoth to make sure change language successfully",gui::OK_ONLY).show();
+#endif
 	return true;
 }
 

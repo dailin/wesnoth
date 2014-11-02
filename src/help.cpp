@@ -353,6 +353,9 @@ protected:
 	virtual void scroll(unsigned int pos);
 	virtual void set_inner_location(const SDL_Rect& rect);
 
+#ifdef __IPHONEOS__
+    virtual void handle_event(const SDL_Event& event);
+#endif
 private:
 	enum ALIGNMENT {LEFT, MIDDLE, RIGHT, HERE};
 	/// Convert a string to an alignment. Throw parse_error if
@@ -2907,6 +2910,13 @@ void help_text_area::draw_contents()
 	}
 	update_rect(loc);
 }
+
+#ifdef __IPHONEOS__
+    void help_text_area::handle_event(const SDL_Event& event)
+    {
+        handle_drag_event(event, 1);
+    }
+#endif
 
 void help_text_area::scroll(unsigned int)
 {

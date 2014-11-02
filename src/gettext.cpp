@@ -25,7 +25,6 @@
 #endif
 
 #include <errno.h>
-#ifdef __IPHONEOS__
 #ifdef setlocale
 // Someone in libintl world decided it was a good idea to define a "setlocale" macro.
 #undef setlocale

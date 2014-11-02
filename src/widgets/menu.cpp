@@ -650,6 +650,7 @@ bool menu::requires_event_focus(const SDL_Event* event) const
 	return false;
 }
 
+#ifndef __IPHONEOS__
 void menu::handle_event(const SDL_Event& event)
 {
 	scrollarea::handle_event(event);
@@ -739,6 +740,100 @@ void menu::handle_event(const SDL_Event& event)
 		}
 	}
 }
+#else
+    void menu::handle_event(const SDL_Event& event)
+    {
+        scrollarea::handle_event(event);
+        if (height()==0 || hidden())
+            return;
+        
+        if (scrollarea::handle_drag_event(event, item_height_) == true)
+            return;
+
+        if(event.type == SDL_KEYDOWN) {
+            // Only pass key events if we have the focus
+            if (focus(&event))
+                key_press(event.key.keysym.sym);
+        } else if(!mouse_locked() && ((event.type == SDL_MOUSEBUTTONDOWN &&
+                                       (event.button.button == SDL_BUTTON_LEFT || event.button.button == SDL_BUTTON_RIGHT)) ||
+                                      event.type == DOUBLE_CLICK_EVENT)) {
+            
+            int x = 0;
+            int y = 0;
+            if(event.type == SDL_MOUSEBUTTONDOWN) {
+                x = event.button.x;
+                y = event.button.y;
+            } else {
+                x = reinterpret_cast<size_t>(event.user.data1);
+                y = reinterpret_cast<size_t>(event.user.data2);
+            }
+            
+            const int item = hit(x,y);
+            if(item != -1) {
+                set_focus(true);
+                move_selection_to(item);
+                
+                if(click_selects_) {
+                    show_result_ = true;
+                }
+                
+                if(event.type == DOUBLE_CLICK_EVENT) {
+                    if (ignore_next_doubleclick_) {
+                        ignore_next_doubleclick_ = false;
+                    } else {
+                        double_clicked_ = true;
+                        last_was_doubleclick_ = true;
+                        if(!silent_) {
+                            sound::play_UI_sound(game_config::sounds::button_press);
+                        }
+                    }
+                } else if (last_was_doubleclick_) {
+                    // If we have a double click as the next event, it means
+                    // this double click was generated from a click that
+                    // already has helped in generating a double click.
+                    SDL_Event ev;
+#if SDL_VERSION_ATLEAST(1,3,0)
+                    SDL_PeepEvents(&ev, 1, SDL_PEEKEVENT,
+                                   DOUBLE_CLICK_EVENT,DOUBLE_CLICK_EVENT);
+#else
+                    SDL_PeepEvents(&ev, 1, SDL_PEEKEVENT,
+                                   SDL_EVENTMASK(DOUBLE_CLICK_EVENT));
+#endif
+                    if (ev.type == DOUBLE_CLICK_EVENT) {
+                        ignore_next_doubleclick_ = true;
+                    }
+                    last_was_doubleclick_ = false;
+                }
+            }
+            
+            
+            if(sorter_ != NULL) {
+                const int heading = hit_heading(x,y);
+                if(heading >= 0 && sorter_->column_sortable(heading)) {
+                    sort_by(heading);
+                }
+            }
+        } else if(!mouse_locked() && event.type == SDL_MOUSEMOTION) {
+            if(click_selects_) {
+                const int item = hit(event.motion.x,event.motion.y);
+                const bool out = (item == -1);
+                if (out_ != out) {
+                    out_ = out;
+                    invalidate_row_pos(selected_);
+                }
+                if (item != -1) {
+                    move_selection_to(item);
+                }
+            }
+            
+            const int heading_item = hit_heading(event.motion.x,event.motion.y);
+            if(heading_item != highlight_heading_) {
+                highlight_heading_ = heading_item;
+                invalidate_heading();
+            }
+        }
+    }
+#endif
 
 int menu::process()
 {

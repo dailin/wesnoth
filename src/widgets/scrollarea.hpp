@@ -54,7 +54,10 @@ protected:
 	void set_full_size(unsigned h);
 	void set_scroll_rate(unsigned r);
 	bool has_scrollbar() const;
-
+#ifdef __IPHONEOS__
+    bool handle_drag_event(const SDL_Event& event, int item_height);
+#endif
+    
 private:
 	scrollbar scrollbar_;
 	int old_position_;
@@ -63,6 +66,11 @@ private:
 	unsigned full_size_;
 
 	void test_scrollbar();
+    
+#ifdef __IPHONEOS__
+    int move;
+    int changeY;
+#endif
 };
 
 } // end namespace gui
