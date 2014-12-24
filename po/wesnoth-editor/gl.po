@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Wesnoth\n"
 "Report-Msgid-Bugs-To: http://bugs.wesnoth.org/\n"
-"POT-Creation-Date: 2014-10-24 20:20+0200\n"
-"PO-Revision-Date: 2014-02-01 15:35+0100\n"
+"POT-Creation-Date: 2014-11-08 21:20+0100\n"
+"PO-Revision-Date: 2014-10-26 09:23+0100\n"
 "Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "Language: gl\n"
@@ -178,10 +178,8 @@ msgstr "Tras a caída"
 
 #. [theme]: id=editor
 #: data/themes/editor.cfg:11
-#, fuzzy
-#| msgid "Quit Editor"
 msgid "theme^Editor"
-msgstr "Saír do editor"
+msgstr "Editor"
 
 #. [menu]: id=menu-editor-file, type=turbo
 #: data/themes/editor.cfg:63
@@ -350,8 +348,6 @@ msgid "Error loading mask"
 msgstr "Houbo un erro ao cargar a máscara"
 
 #: src/editor/map/context_manager.cpp:444
-#, fuzzy
-#| msgid "Identifier: "
 msgid "Identifier:"
 msgstr "Identificador: "
 
@@ -364,7 +360,7 @@ msgid "Choose Target Map"
 msgstr "Escolle o mapa de destino"
 
 #: src/editor/map/context_manager.cpp:462
-#: src/editor/map/context_manager.cpp:894
+#: src/editor/map/context_manager.cpp:895
 msgid "Error loading map"
 msgstr "Houbo un erro ao cargar o mapa"
 
@@ -435,11 +431,11 @@ msgstr ""
 "Cargouse o ficheiro do mapa ao que se fai referencia:\n"
 "$new"
 
-#: src/editor/map/editor_map.cpp:149
+#: src/editor/map/editor_map.cpp:148
 msgid "Player"
 msgstr "Xogador"
 
-#: src/editor/map/editor_map.cpp:266
+#: src/editor/map/editor_map.cpp:265
 msgid "The size of the target map is different from the current map"
 msgstr "O tamaño do mapa de destino é diferente do do mapa actual"
 

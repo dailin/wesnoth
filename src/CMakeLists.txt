@@ -129,11 +129,13 @@ if(USE_ANA_NETWORK)
 	set(server-external-libs
 		${common-external-libs}
 		${ANA_LIBRARIES}
+		${Boost_SYSTEM_LIBRARIES}
 )
 else(USE_ANA_NETWORK)
 	set(server-external-libs
 		${common-external-libs}
 		${SDLNET_LIBRARY}
+		${Boost_SYSTEM_LIBRARIES}
 	)
 	set(game-external-libs
 		${game-external-libs}
@@ -237,7 +239,7 @@ if(ENABLE_BOOST_FILESYSTEM AND NOT ENABLE_PANDORA)
 	)
 else(ENABLE_BOOST_FILESYSTEM AND NOT ENABLE_PANDORA)
 	set(libwesnoth-core_STAT_SRC
-		${libwesnoth-game_STAT_SRC}
+		${libwesnoth-core_STAT_SRC}
 		filesystem.cpp
 		gettext.cpp
 	)
@@ -700,7 +702,6 @@ set(wesnoth-main_SRC
 	callable_objects.cpp
 	commandline_options.cpp
 	config_cache.cpp
-	config_assign.cpp
 	controller_base.cpp
 	desktop_util.cpp
 	dialogs.cpp

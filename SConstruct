@@ -103,7 +103,8 @@ opts.AddVariables(
     BoolVariable('cxx0x', 'Use C++0x features.', False),
     BoolVariable('openmp', 'Enable openmp use.', False),
     BoolVariable("fast", "Make scons faster at cost of less precise dependency tracking.", False),
-    BoolVariable("lockfile", "Create a lockfile to prevent multiple instances of scons from being run at the same time on this working copy.", False)
+    BoolVariable("lockfile", "Create a lockfile to prevent multiple instances of scons from being run at the same time on this working copy.", False),
+    BoolVariable("OS_ENV", "Forward the entire OS environment to scons", False)
     )
 
 #
@@ -124,9 +125,16 @@ if env["lockfile"]:
 opts.Save(GetOption("option_cache"), env)
 env.SConsignFile("$build_dir/sconsign.dblite")
 
+# If OS_ENV was enabled, copy the entire OS environment.
+if env['OS_ENV']:
+    env['ENV'] = os.environ
+
 # Make sure the user's environment is always available
 env['ENV']['PATH'] = os.environ.get("PATH")
-env['ENV']['TERM'] = os.environ.get("TERM")
+term = os.environ.get('TERM')
+if term is not None:
+    env['ENV']['TERM'] = term
+
 if env["PLATFORM"] == "win32":
     env.Tool("mingw")
 elif env["PLATFORM"] == "sunos":
@@ -323,7 +331,7 @@ if env["prereqs"]:
 
     have_server_prereqs = \
         conf.CheckCPlusPlus(gcc_version = "3.3") and \
-        conf.CheckGettextLibintl() and \
+        ((env["boostfilesystem"]) or (conf.CheckGettextLibintl())) and \
         conf.CheckBoost("iostreams", require_version = "1.34.1") and \
         conf.CheckBoostIostreamsGZip() and \
         conf.CheckBoostIostreamsBZip2() and \
@@ -349,7 +357,9 @@ if env["prereqs"]:
         conf.CheckSDL("SDL_mixer", require_version = '1.2.12') and \
         conf.CheckLib("vorbisfile") and \
         conf.CheckSDL("SDL_image", require_version = '1.2.0') and \
-        conf.CheckOgg() or Warning("Client prerequisites are not met. wesnoth, cutter and exploder cannot be built.")
+        conf.CheckOgg() and \
+        conf.CheckPNG() and \
+        conf.CheckJPG() or Warning("Client prerequisites are not met. wesnoth, cutter and exploder cannot be built.")
 
     have_X = False
     if have_client_prereqs:

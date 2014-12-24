@@ -31,6 +31,12 @@
 #include <boost/iostreams/stream.hpp>
 #include <set>
 
+#if defined(_MSC_VER) && (_MSC_VER <= 1500)
+typedef unsigned long int uintmax_t;
+#else
+#include <stdint.h>
+#endif
+
 #ifdef _WIN32
 #include <boost/locale.hpp>
 #include <windows.h>
@@ -68,6 +74,10 @@ namespace {
 		template<typename char_t_to>
 		struct customcodecvt_do_conversion_writer
 		{
+			customcodecvt_do_conversion_writer(char_t_to*& _to_next, char_t_to* _to_end) :
+				to_next(_to_next),
+				to_end(_to_end)
+			{}
 			char_t_to*& to_next;
 			char_t_to* to_end;
 
@@ -97,7 +107,7 @@ namespace {
 
 			from_next = from;
 			to_next = to;
-			customcodecvt_do_conversion_writer<char_t_to> writer = { to_next, to_end };
+			customcodecvt_do_conversion_writer<char_t_to> writer(to_next, to_end);
 			while(from_next != from_end)
 			{
 				impl_type_to::write(writer, impl_type_from::read(from_next, from_end));
@@ -192,9 +202,9 @@ namespace filesystem {
 static void push_if_exists(std::vector<std::string> *vec, const path &file, bool full) {
 	if (vec != NULL) {
 		if (full)
-			vec->push_back(file.string());
+			vec->push_back(file.generic_string());
 		else
-			vec->push_back(file.filename().string());
+			vec->push_back(file.filename().generic_string());
 	}
 }
 
@@ -284,7 +294,7 @@ static bool create_directory_if_missing_recursive(const path& dirpath)
 		return false;
 	}
 
-	if (create_directory_if_missing_recursive(dirpath.parent_path())) {
+	if (!dirpath.has_parent_path() || create_directory_if_missing_recursive(dirpath.parent_path())) {
 		return create_directory_if_missing(dirpath);
 	} else {
 		ERR_FS << "Could not create parents to " << dirpath.string() << '\n';
@@ -325,7 +335,7 @@ void get_files_in_dir(const std::string &dir,
 	bfs::directory_iterator di(dirpath, ec);
 	bfs::directory_iterator end;
 	if (ec) {
-		ERR_FS << "Failed to open directory " << dirpath.string() << ": " << ec.message() << '\n';
+		// Probably not a directory, let the caller deal with it.
 		return;
 	}
 	for(; di != end; ++di) {
@@ -335,9 +345,13 @@ void get_files_in_dir(const std::string &dir,
 			continue;
 		}
 		if (st.type() == bfs::regular_file) {
-			if (filter == SKIP_PBL_FILES && looks_like_pbl(di->path().string()))
-				continue;
-
+			{
+				std::string basename = di->path().filename().string();
+				if (filter == SKIP_PBL_FILES && looks_like_pbl(basename))
+					continue;
+				if(!basename.empty() && basename[0] == '.' )
+					continue;
+			}
 			push_if_exists(files, di->path(), mode == ENTIRE_FILE_PATH);
 
 			if (checksum != NULL) {
@@ -358,6 +372,9 @@ void get_files_in_dir(const std::string &dir,
 			}
 		} else if (st.type() == bfs::directory_file) {
 			std::string basename = di->path().filename().string();
+			
+			if(!basename.empty() && basename[0] == '.' )
+				continue;
 			if (filter == SKIP_MEDIA_DIR
 				&& (basename == "images" || basename == "sounds"))
 				continue;
@@ -477,14 +494,14 @@ void set_user_data_dir(std::string newprefdir)
 		//allow absolute path override
 		user_data_dir = newprefdir;
 	} else {
-		typedef BOOL (WINAPI *SHGSFPAddress)(HWND, LPSTR, int, BOOL);
-		SHGSFPAddress SHGetSpecialFolderPathA;
+		typedef BOOL (WINAPI *SHGSFPAddress)(HWND, LPWSTR, int, BOOL);
+		SHGSFPAddress SHGetSpecialFolderPathW;
 		HMODULE module = LoadLibraryA("shell32");
-		SHGetSpecialFolderPathA = reinterpret_cast<SHGSFPAddress>(GetProcAddress(module, "SHGetSpecialFolderPathA"));
-		if(SHGetSpecialFolderPathA) {
+		SHGetSpecialFolderPathW = reinterpret_cast<SHGSFPAddress>(GetProcAddress(module, "SHGetSpecialFolderPathW"));
+		if(SHGetSpecialFolderPathW) {
 			LOG_FS << "Using SHGetSpecialFolderPath to find My Documents\n";
-			char my_documents_path[MAX_PATH];
-			if(SHGetSpecialFolderPathA(NULL, my_documents_path, 5, 1)) {
+			wchar_t my_documents_path[MAX_PATH];
+			if(SHGetSpecialFolderPathW(NULL, my_documents_path, 5, 1)) {
 				path mygames_path = path(my_documents_path) / "My Games";
 				create_directory_if_missing(mygames_path);
 				user_data_dir = mygames_path / newprefdir;
@@ -637,7 +654,6 @@ std::string get_exe_dir()
 	error_code ec;
 	path exe = bfs::read_symlink(self_exe, ec);
 	if (ec) {
-		ERR_FS << "Failed to dereference " << self_exe.string() << ": " << ec.message() << '\n';
 		return std::string();
 	}
 
@@ -863,6 +879,10 @@ bool is_path_sep(char c)
 }
 std::string normalize_path(const std::string &fpath)
 {
+	if (fpath.empty()) {
+		return fpath;
+	}
+
 	return bfs::absolute(fpath).string();
 }
 

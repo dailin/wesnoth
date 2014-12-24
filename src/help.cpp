@@ -1137,7 +1137,7 @@ std::vector<topic> generate_weapon_special_topics(const bool sort_generated)
 					//add a link in the list of units having this special
 					std::string type_name = type.type_name();
 					//check for variations (walking corpse/soulless etc)
-					const std::string section_prefix = type.variations().empty() ? "" : "..";
+					const std::string section_prefix = type.show_variations_in_help() ? ".." : "";
 					std::string ref_id = section_prefix + unit_prefix + type.id();
 					//we put the translated name at the beginning of the hyperlink,
 					//so the automatic alphabetic sorting of std::set can use it
@@ -1327,15 +1327,20 @@ public:
 
 			const t_translation::t_list& underlying_terrains = resources::game_map->underlying_mvt_terrain(type_.number());
 
-			ss << "\n" << N_("Base Terrain: ");
+			ss << "\n" << _("Base Terrain: ");
 
 			bool first = true;
 			BOOST_FOREACH(const t_translation::t_terrain& underlying_terrain, underlying_terrains) {
 				const terrain_type& mvt_base = resources::game_map->get_terrain_info(underlying_terrain);
 
 				if (mvt_base.editor_name().empty()) continue;
-				if (!first) ss << ",";
-				else first = false;
+
+				if (!first) {
+					ss << ", ";
+				} else {
+					first = false;
+				}
+
 				ss << make_link(mvt_base.editor_name(), ".." + terrain_prefix + mvt_base.id());
 			}
 		}
@@ -1448,7 +1453,7 @@ public:
 					std::string lang_unit = type->type_name();
 					std::string ref_id;
 					if (description_type(*type) == FULL_DESCRIPTION) {
-						const std::string section_prefix = type->variations().empty() ? "" : "..";
+						const std::string section_prefix = type->show_variations_in_help() ? ".." : "";
 						ref_id = section_prefix + unit_prefix + type->id();
 					} else {
 						ref_id = unknown_unit_topic;
@@ -1474,7 +1479,7 @@ public:
 					first = false;
 				}
 				const unit_type* base_type = unit_types.find(base_id, unit_type::HELP_INDEXED);
-				const std::string section_prefix = base_type->variations().empty() ? "" : "..";
+				const std::string section_prefix = base_type->show_variations_in_help() ? ".." : "";
 				ss << make_link(base_type->type_name(), section_prefix + unit_prefix + base_id) << "\n";
 			}
 		}
@@ -1834,7 +1839,7 @@ std::string make_unit_link(const std::string& type_id)
 		std::string name = type->type_name();
 		std::string ref_id;
 		if (description_type(*type) == FULL_DESCRIPTION) {
-			const std::string section_prefix = type->variations().empty() ? "" : "..";
+			const std::string section_prefix = type->show_variations_in_help() ? ".." : "";
 			ref_id = section_prefix + unit_prefix + type->id();
 		} else {
 			ref_id = unknown_unit_topic;
@@ -1956,7 +1961,7 @@ void generate_unit_sections(const config* /*help_cfg*/, section& sec, int level,
 		if (type.race_id() != race)
 			continue;
 
-		if (type.variations().empty())
+		if (!type.show_variations_in_help())
 			continue;
 
 		section base_unit;
@@ -2000,7 +2005,7 @@ std::vector<topic> generate_unit_topics(const bool sort_generated, const std::st
 			continue;
 
 		const std::string type_name = type.type_name();
-		const std::string real_prefix = type.variations().empty() ? "" : "..";
+		const std::string real_prefix = type.show_variations_in_help() ? ".." : "";
 		const std::string ref_id = hidden_symbol(type.hide_help()) + real_prefix + unit_prefix +  type.id();
 		topic unit_topic(type_name, ref_id, "");
 		unit_topic.text = new unit_topic_generator(type);

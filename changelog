@@ -1,9 +1,92 @@
-Version 1.11.18+dev:
+Version 1.12.0+dev:
+ * AI:
+   * Big Animals Micro AI: bug fix for units not attacking when [avoid_unit] is
+     not set
+   * Lurkers MAI: bug fix for attack error when lurker runs into ambush
+   * Lurkers MAI: bug fix for attempting to attack petrified units
+   * Stationed Guardian Micro AI: bug fix for unreachable stations
+ * Campaigns:
+   * Heir to the Throne:
+     * Hide unit variations that should not be listed in the help browser.
+   * Liberty:
+     * Fixed possibility of no viable routes around guards in 'Hide and Seek'.
+   * Son of the Black Eye:
+     * S6 Black Flag: reduce randomness of unit types unloading from galleons
+   * The Rise of Wesnoth:
+     * Hide unit variations that should not be listed in the help browser.
+   * Under the Burning Suns:
+     * Hide unit variations that should not be listed in the help browser.
+ * Editor:
+   * Fixed falcon race missing an icon due to having incorrectly-named image
+     files.
+   * Fixed editor starting slow http://forums.wesnoth.org/viewtopic.php?f=4&t=41421
+ * Help browser:
+   * Unit types that do not include any visible (hide_help=no) variations no
+     longer generate topic sections.
  * Language and i18n:
-   * Updated translations: Spanish
+   * Updated translations: Portuguese
+ * Multiplayer:
+   * Fixed the Set Password option during game creation not having an effect
+     due to a misplaced WML attribute in the client's command for the server
+     (bug #23015).
+   * Work around modifications didn't work for MP campaigns sometimes (bug #22334).
+ * Units:
+   * Assigned capitalized translatable names to Walking Corpse and Soulless
+     variations (bug #22902).
+   * Hid alternate Great Wolf variation from help as it is identical to the
+     default variation stats-wise.
+ * WML engine:
+   * Fixed nested macros emitting incorrect bindings to the default 'wesnoth'
+     textdomain at the end of a substitution instead of the parent textdomain,
+     thus breaking localization of subsequent strings (bug #22962).
+   * Fixed special _initial.cfg and _final.cfg file inclusion order not being
+     honored by Windows builds using Boost.filesystem (bug #22967).
+   * Fixed dotfiles being included when {including} directories in WML, on
+     builds using the new filesystem code (regression introduced in 1.11.19).
  * Miscellaneous and bug fixes:
-   * For compiling Wesnoth on OS X using Xcode, a new version of
-     wesnoth_compile_mac_1.11.zip is now required.
+   * Fixed non-ASCII characters in the user's path prevent
+     BfW to launch on windows (bug #22983)
+   * Fixed wesnoth doesn't start on some systems related to non utf8 default locales.
+     http://forums.wesnoth.org/viewtopic.php?f=4&t=41268
+
+Version 1.12.0:
+ * Language and i18n:
+   * Updated translations: German, Russian
+   * Fixed encoding and other issues with the system default language option
+     on builds using Boost.locale (bugs #22921, #22928).
+ * User interface:
+   * Fixed lower button row padding for GUI1 dialogs including Statistics and
+     the Add-ons Manager (bugs #22379, #22791).
+ * Miscellaneous and bug fixes:
+   * Fixed recursive directory creation failing for working dir-relative paths
+     without an explicit `./` at the start (e.g. in `wesnoth -p data/core foo`)
+     for builds using Boost.filesystem.
+   * Disable start of scenario saves in MP, "fixing" bug #22068.
+
+Version 1.11.19:
+ * Campaigns:
+   * Legend of Wesmere:
+     * Ka’lian under attack: fixed more issues due to new map size.
+     * Ka’lian under attack: fixed two issues with fog. This fixes bug #22880.
+     * Elves Last Stand: fixed not all elvish leaders being able to recruit.
+     * Elves Last Stand: fixed bugs in Olurf and Olurf's party arrival.
+     * Bounty Hunters: fixed several coordinate issues due to new map size.
+     * Cliffs of Thoria: fixed so that yetis can be seen moving in hole in fog.
+     * Fixed player team name in several scenarios.
+     * Fixed player side carryover in several scenarios.
+ * Language and i18n:
+   * Updated translations: Czech, Galician, German, Italian, Portuguese,
+     Scottish Gaelic, Slovak, Spanish
+ * Lua API:
+   * Upgraded Lua to version 5.2.3.
+ * Miscellaneous and bug fixes:
+   * Micro AIs: only display on-screen error messages when in debug mode
+   * Nearest neighbor interpolation used when zooming in on units and terrains
+     See https://github.com/wesnoth/wesnoth/pull/316 and related dev-talk email
+   * New filesystem implementation based on boost filesystem
+ * WML engine:
+   * Fixed a bug that prevented [animate_unit] from displaying death or victory
+     animations for those units that filter them based on weapon (eg. Wose)
 
 Version 1.11.18:
  * Add-ons server:
@@ -11,6 +94,18 @@ Version 1.11.18:
  * Campaigns:
    * Eastern Invasion:
      * Updated maps for scenario 14, 16 and 17b.
+   * Legend of Wesmere:
+     * Fixed broken sides configuration and starting locations in several
+       scenarios.
+     * The Uprooting: fixed Arkildur not appearing in multiplayer mode.
+     * Ka’lian under attack: fixed units and labels offset due to different map
+       sizes after Kalenz and Landar appear (bug #22073).
+     * Bounty Hunters: fixed Olurf being unable to recruit.
+     * Human Alliance: completely redone and rebalanced. This fixes bug #21941,
+       implements FR #16600, and addresses comments made in the feedback topic
+       on the forums.
+     * Chapter 4 is now available in multiplayer mode again.
+     * Minor (mostly cosmetic) changes to several maps.
    * Under the Burning Suns:
      * Fixed recruited Desert Archers being always male.
      * Fixed malformed rand range errors during AI turns on medium difficulty

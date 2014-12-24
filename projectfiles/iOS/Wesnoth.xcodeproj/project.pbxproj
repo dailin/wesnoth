@@ -94,7 +94,6 @@
 		3C4E61F419F4AD8E00D8046D /* color_range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E5D6A19F4AD8900D8046D /* color_range.cpp */; };
 		3C4E61F519F4AD8E00D8046D /* commandline_options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E5D6C19F4AD8900D8046D /* commandline_options.cpp */; };
 		3C4E61F619F4AD8E00D8046D /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E5D6E19F4AD8900D8046D /* config.cpp */; };
-		3C4E61F719F4AD8E00D8046D /* config_assign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E5D7019F4AD8900D8046D /* config_assign.cpp */; };
 		3C4E61F819F4AD8E00D8046D /* config_cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E5D7219F4AD8900D8046D /* config_cache.cpp */; };
 		3C4E61F919F4AD8E00D8046D /* construct_dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E5D7419F4AD8900D8046D /* construct_dialog.cpp */; };
 		3C4E61FA19F4AD8E00D8046D /* controller_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4E5D7619F4AD8900D8046D /* controller_base.cpp */; };
@@ -4234,7 +4233,6 @@
 				3C4E638219F4AD8E00D8046D /* settings.cpp in Sources */,
 				3C4E638D19F4AD8E00D8046D /* controller.cpp in Sources */,
 				3C4E623619F4AD8E00D8046D /* pump.cpp in Sources */,
-				3C4E61F719F4AD8E00D8046D /* config_assign.cpp in Sources */,
 				3C4E633E19F4AD8E00D8046D /* multiplayer_lobby.cpp in Sources */,
 				3C4E61EF19F4AD8E00D8046D /* addon_utils.cpp in Sources */,
 				3C4E63EE19F4AD8E00D8046D /* suppose_dead.cpp in Sources */,

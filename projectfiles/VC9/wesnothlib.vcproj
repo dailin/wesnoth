@@ -49,7 +49,7 @@
 				OpenMP="true"
 				WarningLevel="4"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4127;4512"
+				DisableSpecificWarnings="4127;4512;4068"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -349,6 +349,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\serialization\ucs4_iterator_base.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\serialization\unicode.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\serialization\unicode.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\serialization\validator.cpp"
 				>
 			</File>
@@ -374,19 +386,19 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\config_assign.cpp"
-			>
-		</File>
-		<File
 			RelativePath="..\..\src\config_assign.hpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\filesystem.cpp"
+			RelativePath="..\..\src\filesystem.hpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\filesystem.hpp"
+			RelativePath="..\..\src\filesystem_boost.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\src\filesystem_common.cpp"
 			>
 		</File>
 		<File
@@ -398,11 +410,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\gettext.cpp"
+			RelativePath="..\..\src\gettext.hpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\src\gettext.hpp"
+			RelativePath="..\..\src\gettext_boost.cpp"
 			>
 		</File>
 		<File
@@ -442,15 +454,15 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\src\scoped_resource.hpp"
+			>
+		</File>
+		<File
 			RelativePath="..\..\src\simple_rng.cpp"
 			>
 		</File>
 		<File
 			RelativePath="..\..\src\simple_rng.hpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\src\scoped_resource.hpp"
 			>
 		</File>
 		<File
