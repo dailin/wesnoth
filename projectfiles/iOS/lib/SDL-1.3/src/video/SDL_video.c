@@ -617,8 +617,10 @@ SDL_GetDisplayBounds(int displayIndex, SDL_Rect * rect)
             SDL_GetDisplayBounds(displayIndex-1, rect);
             rect->x += rect->w;
         }
-        rect->w = display->desktop_mode.w;
-        rect->h = display->desktop_mode.h;
+//        rect->w = display->desktop_mode.w;
+//        rect->h = display->desktop_mode.h;
+        rect->w = 1136; //dailin hard code
+        rect->h = 640;
     }
     return 0;
 }

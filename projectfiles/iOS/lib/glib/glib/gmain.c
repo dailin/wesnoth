@@ -48,6 +48,8 @@
 
 #include "config.h"
 #include "glibconfig.h"
+#include <sys/time.h>
+
 
 /* Uncomment the next line (and the corresponding line in gpoll.c) to
  * enable debugging printouts if the environment variable

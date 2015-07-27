@@ -159,7 +159,6 @@ drawParticles()
 
     /* draw the background */
     glClear(GL_COLOR_BUFFER_BIT);
-
     /* set up the position and color pointers */
     glVertexPointer(2, GL_FLOAT, sizeof(struct particle), particles);
     glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(struct particle),
@@ -465,6 +464,7 @@ main(int argc, char *argv[])
         if (delay > 0) {
             SDL_Delay(delay);
         }
+    
     }
 
     /* delete textures */

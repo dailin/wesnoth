@@ -1530,7 +1530,7 @@ network::connection network_connect_dialog(display& disp, const std::string& msg
     campaign_preview_pane::campaign_preview_pane(CVideo &video,std::vector<std::pair<std::string,std::string> >* desc) : gui::preview_pane(video),descriptions_(desc),index_(0)
     {
         // size of the campaign info window with the campaign description and image in pixel
-        set_measurements(430, 340);
+        set_measurements(600, 440);
         index_ = -1;
         set_selection(0);
     }
@@ -1579,13 +1579,13 @@ network::connection network_connect_dialog(display& disp, const std::string& msg
         } catch (utils::invalid_utf8_exception&) {
         }
         //	const std::vector<std::string> lines = utils::split(desc_text, '\n',utils::STRIP_SPACES);
-        SDL_Rect txt_area = { area.x+campaign_preview_border,area.y+campaign_preview_border,0,0 };
+        SDL_Rect txt_area = { area.x+campaign_preview_border,area.y+campaign_preview_border,0, font::get_max_height(font::SIZE_NORMAL)*5};
         
         //	for(std::vector<std::string>::const_iterator line = lines.begin(); line != lines.end(); ++line) {
         //	  txt_area = font::draw_text(&video(),location(),font::SIZE_SMALL,font::NORMAL_COLOUR,*line,txt_area.x,txt_area.y);
         //		txt_area.y += txt_area.h;
         //	}
-        font::draw_text(&video(),location(),font::SIZE_PLUS,font::NORMAL_COLOR,desc_text,txt_area.x,txt_area.y);
+        font::draw_text(&video(),location(),font::SIZE_NORMAL,font::NORMAL_COLOR,desc_text,txt_area.x,txt_area.y);
         
         /* description image */
         surface img(NULL);
@@ -1596,7 +1596,7 @@ network::connection network_connect_dialog(display& disp, const std::string& msg
         if (!img.null()) {
             SDL_Rect src_rect,dst_rect;
             
-            int max_height = area.h-(txt_area.h+txt_area.y-area.y);
+            int max_height = area.h-(txt_area.h+txt_area.y-area.y) - 50;
             
             // scale the image to fit the area, and preserve aspect ratio
             SDL_Rect scaledSize;
@@ -1634,7 +1634,7 @@ network::connection network_connect_dialog(display& disp, const std::string& msg
             dst_rect.y = txt_area.y+((max_height-src_rect.h)*8)/13;
             //         if(dst_rect.y - txt_area.h - txt_area.y >= 120) {
             //for really tall dialogs, just put it under the text
-            dst_rect.y = txt_area.y + font::get_max_height(font::SIZE_PLUS)*6;
+            dst_rect.y = txt_area.y + txt_area.h;
             //         }
             
             

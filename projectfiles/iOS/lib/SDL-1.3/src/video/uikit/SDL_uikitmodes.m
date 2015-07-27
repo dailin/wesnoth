@@ -129,14 +129,14 @@ UIKit_AddDisplay(UIScreen *uiscreen)
     // units.
     CGFloat scale;
     if ([UIScreen instancesRespondToSelector:@selector(scale)]) {
-        if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            scale = 1.0f;
-        }
-        else
-        {
+//        if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//        {
+//            scale = 1.0f;
+//        }
+//        else
+//        {
             scale = [uiscreen scale]; // iOS >= 4.0
-        }
+//        }
     } else {
         scale = 1.0f; // iOS < 4.0
     }

@@ -30,12 +30,14 @@ string iOSManager::getCachePath()
 
 int iOSManager::getScreenWidth()
 {
-    return (int)[UIScreen mainScreen].bounds.size.width;
+//    return (int)[UIScreen mainScreen].bounds.size.width;
+    return 568 * 2;
 }
 
 int iOSManager::getScreenHeight()
 {
-    return (int)[UIScreen mainScreen].bounds.size.height;
+    return 640;
+//    return (int)[UIScreen mainScreen].bounds.size.height;
 }
 
 

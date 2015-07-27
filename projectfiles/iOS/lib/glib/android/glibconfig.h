@@ -184,7 +184,7 @@ union _GSystemThread
   long   dummy_long;
 };
 
-#define G_ATOMIC_OP_MEMORY_BARRIER_NEEDED 1
+//#define G_ATOMIC_OP_MEMORY_BARRIER_NEEDED 1
 
 #define GINT16_TO_LE(val)	((gint16) (val))
 #define GUINT16_TO_LE(val)	((guint16) (val))

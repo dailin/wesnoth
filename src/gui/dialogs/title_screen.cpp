@@ -195,6 +195,7 @@ void ttitle_screen::post_build(CVideo& video, twindow& window)
 	window.register_hotkey(hotkey::HOTKEY_LOAD_GAME,
 						   boost::bind(&hotkey, boost::ref(window), LOAD_GAME));
 
+#ifndef __IPHONEOS__
 	window.register_hotkey(hotkey::HOTKEY_HELP,
 						   boost::bind(&hotkey, boost::ref(window), SHOW_HELP));
 
@@ -219,7 +220,7 @@ void ttitle_screen::post_build(CVideo& video, twindow& window)
 			boost::bind(function_wrapper<bool, boost::function<void()> >,
 						true,
 						boost::cref(previous_tip_wrapper)));
-
+#endif
 	window.register_hotkey(hotkey::TITLE_SCREEN__TUTORIAL,
 						   boost::bind(&hotkey, boost::ref(window), TUTORIAL));
 
@@ -323,6 +324,7 @@ void ttitle_screen::pre_show(CVideo& video, twindow& window)
 
 	update_tip(window, true);
 
+#ifndef __IPHONEOS__
 	connect_signal_mouse_left_click(
 			find_widget<tbutton>(&window, "next_tip", false),
 			boost::bind(&ttitle_screen::update_tip,
@@ -336,7 +338,7 @@ void ttitle_screen::pre_show(CVideo& video, twindow& window)
 						this,
 						boost::ref(window),
 						false));
-
+#endif
 	if(game_config::images::game_title.empty()) {
 		ERR_CF << "No title image defined\n";
 	} else {

@@ -250,6 +250,9 @@ g_timer_elapsed (GTimer *timer,
   return total;
 }
 
+extern void
+g_get_current_time (GTimeVal *result);
+
 void
 g_usleep (gulong microseconds)
 {

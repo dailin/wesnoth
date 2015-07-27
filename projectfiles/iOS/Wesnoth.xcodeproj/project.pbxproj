@@ -1026,7 +1026,6 @@
 		3C4E5D6D19F4AD8900D8046D /* commandline_options.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = commandline_options.hpp; sourceTree = "<group>"; };
 		3C4E5D6E19F4AD8900D8046D /* config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = config.cpp; sourceTree = "<group>"; };
 		3C4E5D6F19F4AD8900D8046D /* config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
-		3C4E5D7019F4AD8900D8046D /* config_assign.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = config_assign.cpp; sourceTree = "<group>"; };
 		3C4E5D7119F4AD8900D8046D /* config_assign.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config_assign.hpp; sourceTree = "<group>"; };
 		3C4E5D7219F4AD8900D8046D /* config_cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = config_cache.cpp; sourceTree = "<group>"; };
 		3C4E5D7319F4AD8900D8046D /* config_cache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config_cache.hpp; sourceTree = "<group>"; };
@@ -2149,7 +2148,6 @@
 				3C4E5D6D19F4AD8900D8046D /* commandline_options.hpp */,
 				3C4E5D6E19F4AD8900D8046D /* config.cpp */,
 				3C4E5D6F19F4AD8900D8046D /* config.hpp */,
-				3C4E5D7019F4AD8900D8046D /* config_assign.cpp */,
 				3C4E5D7119F4AD8900D8046D /* config_assign.hpp */,
 				3C4E5D7219F4AD8900D8046D /* config_cache.cpp */,
 				3C4E5D7319F4AD8900D8046D /* config_cache.hpp */,
@@ -4840,6 +4838,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -4875,6 +4874,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = NO;

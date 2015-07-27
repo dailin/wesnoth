@@ -52,6 +52,7 @@ extern const SDL_Color NORMAL_COLOR, GRAY_COLOR, LOBBY_COLOR, GOOD_COLOR, BAD_CO
                        PETRIFIED_COLOR, TITLE_COLOR, DISABLED_COLOR, LABEL_COLOR;
 
 // font sizes, to be made theme parameters
+#ifndef __IPHONEOS__
 const int SIZE_NORMAL = 14;
 // automatic computation of other font sizes, to be made a default for theme-provided values
 const int
@@ -63,6 +64,19 @@ const int
 	SIZE_LARGE      = 18 * SIZE_NORMAL / 14,
 	SIZE_XLARGE     = 24 * SIZE_NORMAL / 14
   ;
+#else
+    const int SIZE_NORMAL = 18;
+    // automatic computation of other font sizes, to be made a default for theme-provided values
+    const int
+    SIZE_TINY       = 14 * SIZE_NORMAL / 18,
+    SIZE_SMALL      = 16 * SIZE_NORMAL / 18,
+    
+    SIZE_15         = 19 * SIZE_NORMAL / 18,
+    SIZE_PLUS       = 20 * SIZE_NORMAL / 18,
+    SIZE_LARGE      = 22 * SIZE_NORMAL / 18,
+    SIZE_XLARGE     = 28 * SIZE_NORMAL / 18
+    ;
+#endif
 // For arbitrary scaling:
 // (Not used in defining the SIZE_* consts because of spurious compiler warnings.)
 inline int relative_size(int size)

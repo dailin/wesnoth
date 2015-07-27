@@ -370,6 +370,7 @@
 		3CD06C9B1631B5880014DBBB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
 				DSTROOT = /tmp/xml2.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xml2/xml2-Prefix.pch";
@@ -385,6 +386,7 @@
 		3CD06C9C1631B5880014DBBB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
 				DSTROOT = /tmp/xml2.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xml2/xml2-Prefix.pch";

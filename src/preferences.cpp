@@ -34,6 +34,10 @@
 #include <sys/stat.h> // for setting the permissions of the preferences file
 #include <boost/concept_check.hpp>
 
+#ifdef __IPHONEOS__
+#include "iOSManager.h"
+#endif
+
 static lg::log_domain log_config("config");
 #define ERR_CFG LOG_STREAM(err , log_config)
 
@@ -228,7 +232,11 @@ std::pair<int,int> resolution()
 		// which causes distortion with mouse tracking. 768 is simply too large
 		// vertically to safely fit. We need a smaller default resolution here for Macs.
 		// See bug #20332.
+#ifdef __IPHONEOS__
+        return std::pair<int,int>(iOSManager::getScreenWidth(), iOSManager::getScreenHeight());
+#else
 		return std::pair<int,int>(800,600);
+#endif
 	#else
 		return std::pair<int,int>(1024,768);
 	#endif
